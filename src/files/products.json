@@ -1,30 +1,21 @@
 [
   {
-    "title": "collar para perro",
-    "description": "P1-Lorem ipsum dolor sit amet, co",
-    "price": 30,
-    "thumbnail": "img.collar-perri.jpg",
-    "code": "cp",
-    "stock": 20,
+    "title": "producto actualizado desde postman2",
+    "description": "cepillo para mascotas description",
+    "price": 12,
+    "thumbnail": "cepillo-mascotas.jpg",
+    "code": "cm01",
+    "stock": 8,
     "id": 1
   },
   {
-    "title": "comida para perro",
+    "title": "comida para perro updated from postman2",
     "description": "comida para perro description",
     "price": 15,
     "thumbnail": "comida-perro.jpg",
     "code": "cp01",
     "stock": 15,
     "id": 2
-  },
-  {
-    "title": "comida para gato",
-    "description": "comida para gato description",
-    "price": 10,
-    "thumbnail": "comida-gato.jpg",
-    "code": "cg01",
-    "stock": 5,
-    "id": 3
   },
   {
     "title": "Pelota para perro",
@@ -88,5 +79,14 @@
     "code": "cm01",
     "stock": 8,
     "id": 10
+  },
+  {
+    "title": "Producto desde postman",
+    "description": "P1-Lorem ipsum dolor sit amet, co",
+    "price": 30,
+    "thumbnail": "img.collar-perri.jpg",
+    "code": "cpPOSTMAN",
+    "stock": 20,
+    "id": 211
   }
 ]

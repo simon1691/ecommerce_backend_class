@@ -8,13 +8,15 @@ class ProductManager {
   #fileSystem;
 
   // constructor de objecto
-  constructor(title, description, price, thumbnail, code, stock) {
+  constructor(title, description, price, thumbnail, code, stock, status, category) {
     (this.title = title),
     (this.description = description),
     (this.price = price),
     (this.thumbnail = thumbnail),
     (this.code = code),
-    (this.stock = stock)
+    (this.stock = stock),
+    (this.status = status),
+    (this.category = category)
 
     this.#dirPath = "./files";
     this.#fileName = this.#dirPath + "/products.json";
@@ -39,7 +41,7 @@ class ProductManager {
 
   // addProduct permite agregar un producto que no este en el array products
   // ademas permite agregar un id incremental basado en la longitud del array products
-  addProduct = async (title, description, price, thumbnail, code, stock) => {
+  addProduct = async (productToAdd) => {
     try {
       await this.#createFolder();
       // Esto llama al json (en donde se estan guardando los productos)
@@ -52,19 +54,14 @@ class ProductManager {
       this.#products = productsObj;
 
       let newProduct = {
-        title,
-        description,
-        price,
-        thumbnail,
-        code,
-        stock,
-        id: this.#products.length + 1, // El id empieza en 1 no en 0
+        ...productToAdd,
+        id: Math.floor(Math.random() * 1000 + 1), // El id empieza en 1 no en 0
       };
       // verifica si el array products esta vacio para agegar el primer producto
       // si no esta vacio entonces verifica que el producto no exista y lo agrega, ademas devuelve por consola
       // un error que informa que el producto ya existe
       if (this.#products.find((product) => product.code == newProduct.code)) {
-        alert("producto ya existe");
+        console.log("producto ya existe");
       } else {
         this.#products.push(newProduct);
         await this.#fileSystem.promises.writeFile(
@@ -94,7 +91,8 @@ class ProductManager {
   };
 
   // getProductById permite buscar y devolver el producto mediante el id
-  getProductById = async (id) => {
+  getProductById = async (idProduct) => {
+    let id = Number(idProduct)
     let productsJSON = await this.#fileSystem.promises.readFile(
       this.#fileName,
       "utf-8"
@@ -108,47 +106,23 @@ class ProductManager {
   };
 
   // updateProduct permite actualizar los datos del producto usando el id como referencia
-  updateProduct = async (
-    id,
-    title,
-    description,
-    price,
-    thumbnail,
-    code,
-    stock
-  ) => {
+  updateProduct = async (idProduct, productToUpdate) => {
+    let id = Number(idProduct)
     try {
-      let productsJSON = await this.#fileSystem.promises.readFile(
-        this.#fileName,
-        "utf-8"
-      );
+      let productsJSON = await this.#fileSystem.promises.readFile( this.#fileName, "utf-8" );
       let productsObj = JSON.parse(productsJSON);
       this.#products = productsObj;
+
       // evalua si el producto existe y devuelve su index
-      let productIndex = this.#products.findIndex(
-        (product) => product.id === id
-      );
-      // si el index es menor de 0 quiere decir que el producto no existe
-      // si existe procede a actualizar los valores del producto
-      if (productIndex >= 0) {
-        title !== "" || undefined
-          ? (this.#products[productIndex].title = title)
-          : this.#products[productIndex].title;
-        description !== "" || undefined
-          ? (this.#products[productIndex].description = description)
-          : this.#products[productIndex].description;
-        price !== "" || undefined
-          ? (this.#products[productIndex].price = price)
-          : this.#products[productIndex].price;
-        thumbnail !== "" || undefined
-          ? (this.#products[productIndex].thumbnail = thumbnail)
-          : this.#products[productIndex].thumbnail;
-        code !== "" || undefined
-          ? (this.#products[productIndex].code = code)
-          : this.#products[productIndex].code;
-        stock !== "" || undefined
-          ? (this.#products[productIndex].stock = stock)
-          : this.#products[productIndex].stock;
+      let productIndex = this.#products.findIndex((product) => product.id === id );
+
+      // evalua si el index es mayor o igual a 0, toma el valor del index devuelto y lo pasa a la lista de productos
+      // para identificar el producto a actualizar y posteriormente actualizarlo, ademas evalua si el id del producto se esta intentando
+      // actualizar para evitarlo
+      if(productIndex >= 0 && id === productToUpdate.id ){
+        this.#products[productIndex] = {...productToUpdate, id:id}
+      }else{
+        console.log("El producto no existe, o el esta intentando actualizar el id del producto")
       }
 
       await this.#fileSystem.promises.writeFile(
@@ -160,7 +134,8 @@ class ProductManager {
     }
   };
 
-  deleteProduct = async (id) => {
+  deleteProduct = async (idProduct) => {
+    let id = Number(idProduct)
     try {
       let productsJSON = await this.#fileSystem.promises.readFile(
         this.#fileName,
@@ -190,6 +165,6 @@ class ProductManager {
   };
 }
 // instancia el producto
-const newProducts = new ProductManager();
+const productManager = new ProductManager();
 
-export default newProducts;
+export default productManager;
