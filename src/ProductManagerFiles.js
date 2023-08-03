@@ -18,7 +18,7 @@ class ProductManager {
     (this.status = status),
     (this.category = category)
 
-    this.#dirPath = "./files";
+    this.#dirPath = "./src/files";
     this.#fileName = this.#dirPath + "/products.json";
     this.#fileSystem = fs;
   }

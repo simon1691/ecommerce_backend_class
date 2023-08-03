@@ -5,29 +5,45 @@ const router = Router();
 
 // GET Mostrar los carritos creados
 router.get('/', async (req, res) => {
-    let cartsList = await cartsManager.getCarts()
+    try {
+        let cartsList = await cartsManager.getCarts()
 
-    res.send(cartsList)
+        res.json(cartsList)
+    } catch (error) {
+        console.error(error)
+    }
 })
 
 router.get('/:cid', async (req, res) => {
+   try {
     let cartsList = await cartsManager.getProductsInCart(req.params.cid)
-    res.send(cartsList)
+    res.json(cartsList)
+   } catch (error) {
+    console.error(error)
+   }
 })
 
 // POST Agregar un carrito
 router.post('/', async(req, res) => {
+   try {
     await cartsManager.addCart()
-    res.send(' ')
+    res.json(' ')
+   } catch (error) {
+    console.error(error)
+   }
 })
 
 // POST Agregar un producto por id a un carrito especificado
 router.post('/:cid/product/:pid', async(req, res) => {
-    let cartId = req.params.cid
+    try {
+        let cartId = req.params.cid
     let productId = req.params.pid
     let newProduct = req.body
     await cartsManager.addProductsInCart(newProduct, cartId, productId)
-    res.send(newProduct)
+    res.json(newProduct)
+    } catch (error) {
+        console.error(error)
+    }
 })
 
 

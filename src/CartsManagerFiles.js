@@ -11,7 +11,7 @@ class CartManager {
   constructor(products) {
     this.products = products;
 
-    this.#dirPath = "./files";
+    this.#dirPath = "./src/files";
     this.#fileName = this.#dirPath + "/carts.json";
     this.#fileSystem = fs;
   }

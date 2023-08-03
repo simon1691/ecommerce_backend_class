@@ -1,15 +1,6 @@
 [
   {
-    "title": "producto actualizado desde postman2",
-    "description": "cepillo para mascotas description",
-    "price": 12,
-    "thumbnail": "cepillo-mascotas.jpg",
-    "code": "cm01",
-    "stock": 8,
-    "id": 1
-  },
-  {
-    "title": "comida para perro updated from postman2",
+    "title": "comida para perro updated from postman255",
     "description": "comida para perro description",
     "price": 15,
     "thumbnail": "comida-perro.jpg",
@@ -79,14 +70,5 @@
     "code": "cm01",
     "stock": 8,
     "id": 10
-  },
-  {
-    "title": "Producto desde postman",
-    "description": "P1-Lorem ipsum dolor sit amet, co",
-    "price": 30,
-    "thumbnail": "img.collar-perri.jpg",
-    "code": "cpPOSTMAN",
-    "stock": 20,
-    "id": 211
   }
 ]
