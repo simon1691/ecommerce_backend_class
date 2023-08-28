@@ -1,0 +1,434 @@
+[
+    {
+        "title": "Premium Cat Food",
+        "description": "A nutritious blend of high-quality ingredients for optimal cat health.",
+        "thumbnail": "cat_food_thumbnail.jpg",
+        "price": 19.99,
+        "code": "1001",
+        "stock": 50,
+        "category": "gatos"
+    },
+    {
+        "title": "Interactive Dog Toy",
+        "description": "Keep your dog entertained for hours with this durable and engaging toy.",
+        "thumbnail": "dog_toy_thumbnail.jpg",
+        "price": 12.99,
+        "code": "2001",
+        "stock": 30,
+        "category": "perros"
+    },
+    {
+        "title": "Cat Scratching Post",
+        "description": "Give your cat a designated place to scratch and play, saving your furniture.",
+        "thumbnail": "cat_scratcher_thumbnail.jpg",
+        "price": 24.99,
+        "code": "1002",
+        "stock": 20,
+        "category": "gatos"
+    },
+    {
+        "title": "Dog Grooming Kit",
+        "description": "Keep your dog's coat looking its best with this comprehensive grooming kit.",
+        "thumbnail": "dog_grooming_thumbnail.jpg",
+        "price": 34.95,
+        "code": "2002",
+        "stock": 15,
+        "category": "perros"
+    },
+    {
+        "title": "Catnip Mouse Toy",
+        "description": "Entice your cat with this catnip-infused toy for hours of playful fun.",
+        "thumbnail": "catnip_toy_thumbnail.jpg",
+        "price": 6.49,
+        "code": "1003",
+        "stock": 40,
+        "category": "gatos"
+    },
+    {
+        "title": "Premium Dog Food",
+        "description": "A balanced and nutritious dog food formula for optimal health.",
+        "thumbnail": "dog_food_thumbnail.jpg",
+        "price": 29.99,
+        "code": "2003",
+        "stock": 60,
+        "category": "perros"
+    },
+    {
+        "title": "Cozy Cat Bed",
+        "description": "Provide your cat with a comfortable and warm bed for relaxation.",
+        "thumbnail": "cat_bed_thumbnail.jpg",
+        "price": 18.75,
+        "code": "1004",
+        "stock": 25,
+        "category": "gatos"
+    },
+    {
+        "title": "Dog Leash and Collar Set",
+        "description": "A stylish and functional set for walking your dog with ease.",
+        "thumbnail": "dog_leash_collar_thumbnail.jpg",
+        "price": 14.99,
+        "code": "2004",
+        "stock": 35,
+        "category": "perros"
+    },
+    {
+        "title": "Cat Tower with Perches",
+        "description": "A multi-level cat tower with scratching posts and resting perches.",
+        "thumbnail": "cat_tower_thumbnail.jpg",
+        "price": 64.99,
+        "code": "1005",
+        "stock": 10,
+        "category": "gatos"
+    },
+    {
+        "title": "Dog Chew Bones Variety Pack",
+        "description": "Keep your dog entertained and promote dental health with this pack of chew bones.",
+        "thumbnail": "dog_chew_bones_thumbnail.jpg",
+        "price": 22.49,
+        "code": "2005",
+        "stock": 28,
+        "category": "perros"
+    },
+    {
+        "title": "Sisal Rope Ball Toy",
+        "description": "A natural sisal rope toy that cats will love to bat and play with.",
+        "thumbnail": "sisal_rope_ball_thumbnail.jpg",
+        "price": 8.99,
+        "code": "1006",
+        "stock": 55,
+        "category": "gatos"
+    },
+    {
+        "title": "Reflective Dog Harness",
+        "description": "Ensure your dog's safety during walks with this reflective harness.",
+        "thumbnail": "reflective_dog_harness_thumbnail.jpg",
+        "price": 19.95,
+        "code": "2006",
+        "stock": 22,
+        "category": "perros"
+    },
+    {
+        "title": "Cat Litter Box",
+        "description": "A spacious and easy-to-clean litter box for your feline friend.",
+        "thumbnail": "cat_litter_box_thumbnail.jpg",
+        "price": 32.75,
+        "code": "1007",
+        "stock": 18,
+        "category": "gatos"
+    },
+    {
+        "title": "Dog Training Clicker",
+        "description": "Train your dog with positive reinforcement using this clicker.",
+        "thumbnail": "dog_training_clicker_thumbnail.jpg",
+        "price": 5.99,
+        "code": "2007",
+        "stock": 40,
+        "category": "perros"
+    },
+    {
+        "title": "Plush Cat Tunnel",
+        "description": "Provide your cat with a cozy tunnel for hiding, playing, and exploring.",
+        "thumbnail": "plush_cat_tunnel_thumbnail.jpg",
+        "price": 14.49,
+        "code": "1008",
+        "stock": 28,
+        "category": "gatos"
+    },
+    {
+        "title": "Natural Dog Treats Variety Pack",
+        "description": "A selection of all-natural dog treats for training and rewards.",
+        "thumbnail": "natural_dog_treats_thumbnail.jpg",
+        "price": 12.99,
+        "code": "2008",
+        "stock": 33,
+        "category": "perros"
+    },
+    {
+        "title": "Self-Cleaning Cat Litter Scoop",
+        "description": "Simplify litter box maintenance with this self-cleaning scoop.",
+        "thumbnail": "self_cleaning_litter_scoop_thumbnail.jpg",
+        "price": 9.75,
+        "code": "1009",
+        "stock": 45,
+        "category": "gatos"
+    },
+    {
+        "title": "Waterproof Dog Raincoat",
+        "description": "Keep your dog dry during rainy walks with this waterproof raincoat.",
+        "thumbnail": "dog_raincoat_thumbnail.jpg",
+        "price": 27.49,
+        "code": "2009",
+        "stock": 20,
+        "category": "perros"
+    },
+    {
+        "title": "Cat Feather Teaser Toy",
+        "description": "Entertain your cat with this feather teaser wand for interactive play.",
+        "thumbnail": "cat_feather_teaser_thumbnail.jpg",
+        "price": 7.99,
+        "code": "1010",
+        "stock": 60,
+        "category": "gatos"
+    },
+    {
+        "title": "Dog Cooling Mat",
+        "description": "Help your dog stay cool during hot weather with this cooling mat.",
+        "thumbnail": "dog_cooling_mat_thumbnail.jpg",
+        "price": 18.25,
+        "code": "2010",
+        "stock": 15,
+        "category": "perros"
+    },
+    {
+        "title": "Fish-Shaped Cat Bowl",
+        "description": "A cute and stylish fish-shaped bowl for your cat's meals.",
+        "thumbnail": "fish_cat_bowl_thumbnail.jpg",
+        "price": 6.49,
+        "code": "1011",
+        "stock": 50,
+        "category": "gatos"
+    },
+    {
+        "title": "Chewable Dog Dental Sticks",
+        "description": "Promote dental health and reduce tartar with these tasty dental sticks.",
+        "thumbnail": "dog_dental_sticks_thumbnail.jpg",
+        "price": 9.99,
+        "code": "2011",
+        "stock": 25,
+        "category": "perros"
+    },
+    {
+        "title": "Scratching Post with Hammock",
+        "description": "A multi-functional scratching post with an attached hammock for cats.",
+        "thumbnail": "scratching_post_hammock_thumbnail.jpg",
+        "price": 39.95,
+        "code": "1012",
+        "stock": 15,
+        "category": "gatos"
+    },
+    {
+        "title": "Dog Travel Water Bottle",
+        "description": "Stay hydrated on-the-go with this portable water bottle for dogs.",
+        "thumbnail": "dog_travel_water_bottle_thumbnail.jpg",
+        "price": 14.75,
+        "code": "2012",
+        "stock": 30,
+        "category": "perros"
+    },
+    {
+        "title": "Cat Tower with Hanging Toys",
+        "description": "A multi-level cat tower with interactive hanging toys for playtime.",
+        "thumbnail": "cat_tower_hanging_toys_thumbnail.jpg",
+        "price": 54.99,
+        "code": "1013",
+        "stock": 12,
+        "category": "gatos"
+    },
+    {
+        "title": "Dog Frisbee Toy",
+        "description": "Have fun playing fetch with your dog using this durable frisbee toy.",
+        "thumbnail": "dog_frisbee_toy_thumbnail.jpg",
+        "price": 8.49,
+        "code": "2013",
+        "stock": 40,
+        "category": "perros"
+    },
+    {
+        "title": "Heated Cat Bed",
+        "description": "Keep your cat warm and cozy during colder months with this heated bed.",
+        "thumbnail": "heated_cat_bed_thumbnail.jpg",
+        "price": 38.99,
+        "code": "1014",
+        "stock": 18,
+        "category": "gatos"
+    },
+    {
+        "title": "Dog Poop Bag Dispenser",
+        "description": "Stay prepared during walks with this convenient poop bag dispenser.",
+        "thumbnail": "dog_poop_bag_dispenser_thumbnail.jpg",
+        "price": 6.99,
+        "code": "2014",
+        "stock": 50,
+        "category": "perros"
+    },
+    {
+        "title": "Microfiber Dog Towel",
+        "description": "Quickly dry your dog after baths or walks with this absorbent microfiber towel.",
+        "thumbnail": "microfiber_dog_towel_thumbnail.jpg",
+        "price": 11.49,
+        "code": "3001",
+        "stock": 35,
+        "category": "perros"
+    },
+    {
+        "title": "Tunnel Maze Cat Toy",
+        "description": "Engage your cat's natural curiosity with this tunnel maze toy.",
+        "thumbnail": "tunnel_maze_cat_toy_thumbnail.jpg",
+        "price": 18.99,
+        "code": "4001",
+        "stock": 25,
+        "category": "gatos"
+    },
+    {
+        "title": "Dog Puzzle Feeder",
+        "description": "Keep your dog mentally stimulated with this interactive puzzle feeder.",
+        "thumbnail": "dog_puzzle_feeder_thumbnail.jpg",
+        "price": 24.75,
+        "code": "3002",
+        "stock": 20,
+        "category": "perros"
+    },
+    {
+        "title": "Cozy Pet Blanket",
+        "description": "Provide comfort and warmth for your pet with this soft and cozy blanket.",
+        "thumbnail": "cozy_pet_blanket_thumbnail.jpg",
+        "price": 13.25,
+        "code": "4002",
+        "stock": 30,
+        "category": "mascotas"
+    },
+    {
+        "title": "Catnip Infused Ball",
+        "description": "Entice your cat with this catnip-infused ball for hours of play.",
+        "thumbnail": "catnip_infused_ball_thumbnail.jpg",
+        "price": 5.99,
+        "code": "3003",
+        "stock": 50,
+        "category": "gatos"
+    },
+    {
+        "title": "Dog Car Seat Cover",
+        "description": "Protect your car seats from dog hair, dirt, and scratches with this seat cover.",
+        "thumbnail": "dog_car_seat_cover_thumbnail.jpg",
+        "price": 29.95,
+        "code": "4003",
+        "stock": 15,
+        "category": "gatos"
+    },
+    {
+        "title": "Interactive Laser Toy",
+        "description": "Amuse your cat with this interactive laser toy for endless chasing fun.",
+        "thumbnail": "interactive_laser_toy_thumbnail.jpg",
+        "price": 8.49,
+        "code": "3004",
+        "stock": 40,
+        "category": "gatos"
+    },
+    {
+        "title": "Dog Chewing Rope",
+        "description": "Provide your dog with a durable chewing rope to satisfy their natural urge to chew.",
+        "thumbnail": "dog_chewing_rope_thumbnail.jpg",
+        "price": 7.99,
+        "code": "4004",
+        "stock": 50,
+        "category": "perros"
+    },
+    {
+        "title": "Cat Hammock Bed",
+        "description": "Give your cat a cozy hammock bed for lounging and napping.",
+        "thumbnail": "cat_hammock_bed_thumbnail.jpg",
+        "price": 19.99,
+        "code": "3005",
+        "stock": 18,
+        "category": "gatos"
+    },
+    {
+        "title": "Dog Safety Vest",
+        "description": "Ensure visibility and safety during nighttime walks with this reflective safety vest.",
+        "thumbnail": "dog_safety_vest_thumbnail.jpg",
+        "price": 14.25,
+        "code": "4005",
+        "stock": 28,
+        "category": "perros"
+    },
+    {
+        "title": "Cat Grooming Brush",
+        "description": "Keep your cat's coat smooth and tangle-free with this gentle grooming brush.",
+        "thumbnail": "cat_grooming_brush_thumbnail.jpg",
+        "price": 10.99,
+        "code": "3006",
+        "stock": 42,
+        "category": "gatos"
+    },
+    {
+        "title": "Dog Travel Carrier",
+        "description": "Travel comfortably with your dog using this convenient and secure travel carrier.",
+        "thumbnail": "dog_travel_carrier_thumbnail.jpg",
+        "price": 39.49,
+        "code": "4006",
+        "stock": 20,
+        "category": "perros"
+    },
+    {
+        "title": "Feathered Dog Toy",
+        "description": "Keep your dog entertained with this feathered toy for fetching and playing.",
+        "thumbnail": "feathered_dog_toy_thumbnail.jpg",
+        "price": 6.49,
+        "code": "3007",
+        "stock": 60,
+        "category": "perros"
+    },
+    {
+        "title": "Interactive Cat Puzzle",
+        "description": "Challenge your cat's intelligence with this interactive puzzle game.",
+        "thumbnail": "interactive_cat_puzzle_thumbnail.jpg",
+        "price": 14.99,
+        "code": "4007",
+        "stock": 30,
+        "category": "gatos"
+    },
+    {
+        "title": "Dog Toothbrush Kit",
+        "description": "Maintain your dog's oral health with this toothbrush kit designed for pets.",
+        "thumbnail": "dog_toothbrush_kit_thumbnail.jpg",
+        "price": 9.75,
+        "code": "3008",
+        "stock": 25,
+        "category": "perros"
+    },
+    {
+        "title": "Pet Hair Vacuum",
+        "description": "Easily remove pet hair from furniture and carpets with this powerful vacuum.",
+        "thumbnail": "pet_hair_vacuum_thumbnail.jpg",
+        "price": 89.99,
+        "code": "5001",
+        "stock": 15,
+        "category": "mascotas"
+    },
+    {
+        "title": "Interactive Dog Puzzle",
+        "description": "Challenge your dog's problem-solving skills with this engaging puzzle toy.",
+        "thumbnail": "interactive_dog_puzzle_thumbnail.jpg",
+        "price": 21.95,
+        "code": "6001",
+        "stock": 20,
+        "category": "perros"
+    },
+    {
+        "title": "Pet Odor Eliminator Spray",
+        "description": "Banish unpleasant odors with this effective and pet-friendly odor eliminator.",
+        "thumbnail": "pet_odor_eliminator_spray_thumbnail.jpg",
+        "price": 12.49,
+        "code": "5002",
+        "stock": 40,
+        "category": "mascotas"
+    },
+    {
+        "title": "Cozy Dog Hoodie",
+        "description": "Keep your dog warm and stylish with this comfortable hoodie.",
+        "thumbnail": "cozy_dog_hoodie_thumbnail.jpg",
+        "price": 18.75,
+        "code": "6002",
+        "stock": 35,
+        "category": "perros"
+    },
+    {
+        "title": "Automatic Cat Feeder",
+        "description": "Ensure your cat is fed on time with this programmable automatic feeder.",
+        "thumbnail": "automatic_cat_feeder_thumbnail.jpg",
+        "price": 54.99,
+        "code": "5003",
+        "stock": 18,
+        "category": "gatos"
+    }
+]

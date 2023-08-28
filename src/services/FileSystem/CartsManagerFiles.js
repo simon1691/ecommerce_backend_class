@@ -74,7 +74,7 @@ class CartManager {
     }
   };
 
-  getProductsInCart = async (cartId) => {
+  getCartById = async (cartId) => {
     let id = Number(cartId);
     try {
       await this.#createFolder();

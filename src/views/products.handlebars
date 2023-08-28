@@ -1,7 +1,20 @@
 <div>
     {{#if areProducts}}
         <h1>Listado de productos existentes</h1>
-        {{#each productsList}}
+        <br/>
+        <div>
+            {{#if hasPrevPage}}
+                <a href={{this.prevLink}}><< Anterior</a>
+            {{/if}}
+            &nbsp;
+            {{this.page}}
+            &nbsp;
+            {{#if hasNextPage}}
+                <a href={{this.nextLink}}>Siguiente >></a>
+            {{/if}} 
+        </div>
+        <br/>
+        {{#each docs}}
             <div>
                 <p>title: {{this.title}}</p>
                 <p>description: {{this.description}}</p>
@@ -10,14 +23,12 @@
                 <p>code: {{this.code}}</p>
                 <p>stock: {{this.stock}}</p>
                 <p>category: {{this.category}}</p>
-                <br>
-                <button id={{this._id}} type="button" onclick="getId(event)">Add To cart</button>
             </div>
             <hr>
         {{/each}}
+        
+        
         {{else}}
         <h1>No Hay productos aun para mostrar</h1>
     {{/if}}
 </div>
-
-<script src="/js/index.js"></script>

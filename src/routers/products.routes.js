@@ -1,57 +1,65 @@
 import { Router } from "express";
-import productManager from '../ProductManagerFiles.js'
+// import productManager from '../services/FileSystem/ProductManagerFiles.js'
+import ProductManager from "../services/mongoDb/ProductManager.js";
+import productModel from ".././services/mongoDb/models/products.model.js";
 
 const router = Router();
+
+const productManager = new ProductManager();
 
 //GET
 router.get("/", async (req, res) => {
   try {
     let limit = req.query.limit;
-    let products = await productManager.getProducts();
-    // let productsToshow =  JSON.parse(products)
-    if (!limit || limit == 0) {
+    let page = parseInt(req.query.page);
+    let sort = req.query.sort;
+    let sortBy = req.query.sortBy;
+    let filterBy = req.query.filterBy;
+    let filter = req.query.filter;
+    let productsList = await productManager.getProducts(
+      limit,
+      sort,
+      sortBy,
+      filter,
+      filterBy
+    );
+    // Page
+    if (page) {
+      let productsList = await productModel.paginate(
+        filterBy ? { [filterBy]: filter } : "",
+        { page, limit: 5, lean: true, sort: sort ? { [sortBy]: sort } : {} }
+      );
+      productsList.prevLink = productsList.hasPrevPage
+        ? `http://localhost:8181/api/products/?page=${productsList.prevPage}`
+        : null;
+      productsList.nextLink = productsList.hasNextPage
+        ? `http://localhost:8181/api/products/?page=${productsList.nextPage}`
+        : null;
+      productsList.areProducts = !(page <= 0 || page > productsList.totalPages);
 
-      // llamar la vista homeHandlersBars
-      res.render('home',{
-        areProducts: products.length > 0,
-        products
-      });
-    } else {
-      products = products.slice(0, limit);
-
-      // llamar la vista homeHandlersBars
-      res.render('home',{
-        areProducts: products.length > 0,
-        products
-      });
+      res.render("products", productsList);
+      return;
     }
-
+    res.render("home", {
+      areProducts: productsList.length > 0,
+      productsList,
+    });
   } catch (error) {
     console.error(error);
   }
 });
 
-
-// router.get("/realTimeProducts", async (req, res) => {
-//   try {
-//     let products = await productManager.getProducts();
-//       // llamar la vista homeHandlersBars
-//       res.render('realTimeProducts',{
-//         areProducts: products.length > 0,
-//         products
-//       });
-//   } catch (error) {
-//     console.error(error);
-//   }
-// });
-
-
-router.get("/:pid", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
-    let productById = await productManager.getProductById(req.params.pid);
-    res.send(productById);
+    const productsList = [];
+    const productById = await productManager.getProductById(req.params.id);
+    productsList.push(productById);
+    res.render("home", {
+      areProducts: productsList.length > 0,
+      productsList,
+    });
   } catch (error) {
-    console.error(error);
+    console.error("Error: " + error);
   }
 });
 
@@ -60,7 +68,6 @@ router.post("/", async (req, res) => {
   try {
     let prouctToAdd = req.body;
     await productManager.addProduct(prouctToAdd);
-
     res.json(prouctToAdd);
   } catch (error) {
     console.error(error);
@@ -71,11 +78,8 @@ router.post("/", async (req, res) => {
 router.put("/:pid", async (req, res) => {
   try {
     let productToUpdate = req.body;
-    console.log("test ", productToUpdate)
     await productManager.updateProduct(req.params.pid, productToUpdate);
-    let productById = await productManager.getProductById(req.params.pid);
-
-    res.json(productById);
+    res.json(productToUpdate);
   } catch (error) {
     console.error(error);
   }
@@ -84,14 +88,12 @@ router.put("/:pid", async (req, res) => {
 //DELETE
 router.delete("/:pid", async (req, res) => {
   try {
-    let productById = await productManager.getProductById(req.params.pid);
+    let productToDelete = req.params.pid;
     await productManager.deleteProduct(req.params.pid);
-
-    res.json(productById);
+    res.json(productToDelete);
   } catch (error) {
     console.error(error);
   }
 });
-
 
 export default router;
