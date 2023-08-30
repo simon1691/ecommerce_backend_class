@@ -41,7 +41,7 @@ router.get("/", async (req, res) => {
       return;
     }
     res.render("home", {
-      areProducts: productsList.length > 0,
+      areProducts: productsList.length,
       productsList,
     });
   } catch (error) {
@@ -55,7 +55,7 @@ router.get("/:id", async (req, res) => {
     const productById = await productManager.getProductById(req.params.id);
     productsList.push(productById);
     res.render("home", {
-      areProducts: productsList.length > 0,
+      areProducts: productsList.length,
       productsList,
     });
   } catch (error) {

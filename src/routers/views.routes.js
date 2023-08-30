@@ -10,7 +10,7 @@ router.get("/", async (req, res) => {
   try {
     const productsList = await productManager.getProducts();
     res.render("home", {
-      areProducts: productsList.length > 0,
+      areProducts: productsList.length,
       productsList,
     });
   } catch (error) {
@@ -45,17 +45,4 @@ router.get("/products", async (req, res) => {
     console.error(error);
   }
 });
-// router.get('/:id', async (req, res) => {
-//     try {
-//         let productsList = []
-//         const productById = await productManager.getProductById(req.params.id)
-//         productsList.push(productById)
-//         res.render('home', {
-//             areProducts: productsList.length > 0,
-//             productsList
-//         })
-//     } catch (error) {
-//         console.error('Error: ' + error)
-//     }
-// })
 export default router;
