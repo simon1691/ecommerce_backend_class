@@ -1,0 +1,21 @@
+<div>
+    {{#if valid }}
+        <h1>Listado de productos existentes Dentro del carrito {{id}}</h1>
+        <br/>
+        {{#each products}}
+            <div>
+                <p>title: {{_doc.title}}</p>
+                <p>description: {{_doc.description}}</p>
+                <p>price: {{_doc.price}}</p>
+                <p>thumbnail: {{_doc.thumbnail}}</p>
+                <p>code: {{_doc.code}}</p>
+                <p>stock: {{_doc.stock}}</p>
+                <p>category: {{_doc.category}}</p>
+            </div>
+            <hr>
+        {{/each}}      
+        
+        {{else}}
+        <h1>No Hay Carrito aun para mostrar</h1>
+    {{/if}}
+</div>
