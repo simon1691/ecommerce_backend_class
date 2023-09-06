@@ -16,6 +16,7 @@ router.get("/", async (req, res) => {
     let sortBy = req.query.sortBy;
     let filterBy = req.query.filterBy;
     let filter = req.query.filter;
+    let user = req.session.user
     let productsList = await productManager.getProducts(
       limit,
       sort,
@@ -36,6 +37,7 @@ router.get("/", async (req, res) => {
         ? `http://localhost:8181/api/products/?page=${productsList.nextPage}`
         : null;
       productsList.areProducts = !(page <= 0 || page > productsList.totalPages);
+      productsList.user = user
 
       res.render("products", productsList);
       return;
@@ -43,6 +45,7 @@ router.get("/", async (req, res) => {
     res.render("home", {
       areProducts: productsList.length,
       productsList,
+      user
     });
   } catch (error) {
     console.error(error);

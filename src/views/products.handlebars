@@ -1,4 +1,72 @@
-<div>
+{{#if user.admin}}
+<div class="container-fluid d-flex justify-content-between py-3 px-5 bg-dark mb-5 align-items-center text-white">
+    <p class="pe-2 fw-medium m-0 fs-6">Bienvenido Super Usuario: {{user.first_name}} {{user.last_name}}</p>
+    <button id="logout" type="button" class="btn btn btn-light btn-sm">Logout</button>
+</div>
+
+{{else}}
+<div class="container-fluid d-flex justify-content-between py-3 px-5 bg-primary-subtle mb-5 align-items-center">
+    <p class="pe-2 fw-medium m-0 fs-6">Bienvenido: {{user.first_name}} {{user.last_name}}</p>
+    <button id="logout" type="button" class="btn btn-outline-secondary btn-sm">Logout</button>
+</div>
+{{/if}}
+
+
+<div class="container">
+    {{#if areProducts}}
+        <h1 class="text-center mb-5">Listado de productos existentes</h1>
+        <div class="container my-4 py-3 d-flex w-75 align-items-center justify-content-center">
+            {{#if hasPrevPage}}
+                <div>
+                    <a class="btn bg-body-secondary btn-sm rounded-circle fw-bold" style="height: 32px; width:32px" href={{this.prevLink}}><</a>
+                </div>
+                {{else}}
+                    <span class="">Pagination</span>
+            {{/if}}
+
+            <div class="d-flex align-items-center justify-content-center rounded-pill bg-body-secondary px-3 mx-2">
+                {{#if prevPage}}
+                    <div class="d-flex align-items-center justify-content-center" style="height: 32px; width:32px"><span>{{this.prevPage}}</span></div>
+                    
+                {{/if}}
+
+                <div class="d-flex align-items-center justify-content-center bg-primary-subtle rounded-circle" style="height: 32px; width:32px">
+                    <span class="fw-bold">{{this.page}}</span>
+                </div>
+                {{#if nextPage}}
+                    <div class="d-flex align-items-center justify-content-center" style="height: 32px; width:32px"><span>{{this.nextPage}}</span></div>
+                {{/if}}
+            </div>
+            {{#if hasNextPage}}
+                <div>
+                    <a class="btn bg-body-secondary btn-sm rounded-circle fw-bold" style="height: 32px; width:32px" href={{this.nextLink}}>></a>
+                </div>
+            {{/if}} 
+        </div>
+        <div class="row g-5 flex-wrap">
+            {{#each docs}}
+            <div class="col-md-4 col-xl-3">
+                <div class="card" style="height: 400px;">
+                    <img height="150" src="#" class="card-img-top w-100 bg-secondary-subtle" alt="">
+                    <div class="card-body">
+                        <p class="badge text-bg-primary fw-light mt-0 mb-2 bg-info-subtle text-black">{{this.category}}</p>
+                        <h5 class="card-title">{{this.title}}</h5>
+                        <p class="card-text">{{this.description}}</p>
+                        <p class="card-text fw-bold">Price: ${{this.price}}</p>
+                        <button id={{this._id}} type="button" class="btn btn-primary btn-sm w-100" onclick="getId(event)">Add To cart</button>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+        </div>
+
+        
+        
+        {{else}}
+        <h1>No Hay productos aun para mostrar</h1>
+    {{/if}}
+</div>
+{{!-- <div>
     {{#if areProducts}}
         <h1>Listado de productos existentes</h1>
         <br/>
@@ -31,4 +99,4 @@
         {{else}}
         <h1>No Hay productos aun para mostrar</h1>
     {{/if}}
-</div>
+</div> --}}
