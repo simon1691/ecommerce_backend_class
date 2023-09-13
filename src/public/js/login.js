@@ -7,6 +7,7 @@ form.addEventListener('submit', (e) => {
     const loginData = {}
 
     data.forEach((value, key) => loginData[key] = value)
+    
     console.log(loginData, JSON.stringify(loginData))
 
     fetch('/api/sessions/login', {
@@ -22,4 +23,3 @@ form.addEventListener('submit', (e) => {
     }
 })
 })
-

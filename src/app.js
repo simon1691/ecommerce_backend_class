@@ -1,14 +1,17 @@
 import express from 'express';
 import __dirname from './utils.js'
 import handlebars from 'express-handlebars'
-
 import mongoose from 'mongoose';
 
+//routers
 import viewsRoutes from './routers/views.routes.js'
 import productsRoutes from './routers/products.routes.js'
 import cartsRoutes from './routers/carts.routes.js'
 import sessionRoutes from './routers/session.routes.js'
 
+//passport
+import passport from 'passport';
+import initializePassport from './config/passport.config.js';
 
 //Session store
 import session from 'express-session';
@@ -35,6 +38,11 @@ app.use(session({
     resave: false, //guarda en memoria
     saveUninitialized: false, //lo guarda a penas se crea
 }))
+
+//Middlewares Passport
+initializePassport();
+app.use(passport.initialize())
+app.use(passport.session())
 
 //Routers
 app.use('/', viewsRoutes)

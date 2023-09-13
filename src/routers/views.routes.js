@@ -6,26 +6,30 @@ const router = Router();
 
 const productManager = new ProductManager();
 
-router.get('/login', async (req, res) => {
-  res.render("login")
-})
+router.get("/login", async (req, res) => {
+  res.render("login");
+});
 
-router.get('/register', async (req, res) => {
-  res.render("register")
-})
+router.get("/register", async (req, res) => {
+  res.render("register");
+});
 
 router.get("/", async (req, res) => {
   try {
-    if(req.session.user){
+    if (req.session.user) {
       const productsList = await productManager.getProducts();
-      const user = req.session.user
+      const user = req.session.user;
       console.log(user)
+
+      if (user.email === "adminCoder@coder.com") {
+        user.admin = true;
+      }
       res.render("home", {
         areProducts: productsList.length,
         productsList,
-        user
-      })
-    }else{
+        user,
+      });
+    } else {
       res.render("login");
     }
   } catch (error) {
@@ -40,7 +44,7 @@ router.get("/products", async (req, res) => {
     let sortBy = req.query.sortBy;
     let filterBy = req.query.filterBy;
     let filter = req.query.filter;
-    let user = req.session.user
+    let user = req.session.user;
     // Page
     if (!page) page = 1;
     let productsList = await productModel.paginate(
@@ -54,11 +58,8 @@ router.get("/products", async (req, res) => {
       ? `http://localhost:8181/products/?page=${productsList.nextPage}`
       : null;
     productsList.areProducts = !(page <= 0 || page > productsList.totalPages);
-      productsList.user = user
-      console.log(productsList)
-    res.render("products",
-      productsList
-      );
+    productsList.user = user;
+    res.render("products", productsList);
     return;
   } catch (error) {
     console.error(error);
