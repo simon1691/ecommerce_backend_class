@@ -1,7 +1,7 @@
 import passport from "passport";
 import passportLocal from "passport-local";
 import { createHash, isValidPassword } from "../utils.js";
-import userModel from "../services/mongoDb/models/users.model.js";
+import userModel from "../services/models/users.model.js";
 import GitHubStrategy from "passport-github2";
 
 // declaracion de estrategia (local)

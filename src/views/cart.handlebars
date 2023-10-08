@@ -1,5 +1,8 @@
 <div>
-    {{#if valid }}
+     {{#if noCart}}
+     <h1>El carrito no existe </h1>
+     {{else}}
+      {{#if valid }}
         <h1>Listado de productos existentes Dentro del carrito {{id}}</h1>
         <br/>
         {{#each products}}
@@ -16,6 +19,7 @@
         {{/each}}      
         
         {{else}}
-        <h1>No Hay Carrito aun para mostrar</h1>
+        <h1>El carrito: {{id}} no tiene productos aun! </h1>
     {{/if}}
+     {{/if}}
 </div>

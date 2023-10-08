@@ -1,6 +1,6 @@
-import productModel from "./models/products.model.js";
+import productModel from "../../models/products.model.js";
 
-export default class ProductManager {
+export default class ProductManagerService {
   constructor() {}
 
   addProduct = async (product) => {
