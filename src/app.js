@@ -59,7 +59,7 @@ app.set('view engine', 'handlebars');
 
 
 app.listen(PORT, () => {
-    console.log('el servidor esta funcionando')
+    console.log('el servidor esta funcionando', PORT)
 })
 
 // Conxion coin MOngo 
