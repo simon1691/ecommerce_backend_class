@@ -2,6 +2,8 @@ import express from 'express';
 import __dirname from './utils.js'
 import handlebars from 'express-handlebars'
 import mongoose from 'mongoose';
+import config from './config/config.js';
+import MongoSingleton from './config/mongodb-singleton.js';
 
 //routers
 import viewsRoutes from './routers/views.routes.js'
@@ -18,8 +20,8 @@ import session from 'express-session';
 import MongoStore from 'connect-mongo';
 
 const app = express();
-const PORT = 8181
-const MONGO_URL = "mongodb://127.0.0.1:27017/ecommerce";
+const PORT = config.port;
+const MONGO_URL = config.mongoUrl;
 
 //para que el servidor pueda recibir obj json
 app.use(express.json());
@@ -60,14 +62,12 @@ app.listen(PORT, () => {
     console.log('el servidor esta funcionando')
 })
 
-//Conect to the MongoDb
-const connectDB = async () => {
+// Conxion coin MOngo 
+const mongoInstance = async () => {
   try {
-    await mongoose.connect(MONGO_URL)
-    console.log('Conectado a la base de datos de mongo')
+      await MongoSingleton.getInstance();
   } catch (error) {
-    console.log('error: ' + error)
+      console.error(error);
   }
-}
-
-connectDB()
+};
+mongoInstance()
