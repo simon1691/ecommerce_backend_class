@@ -1,4 +1,8 @@
 import cartModel from "../../models/carts.model.js";
+import ProductManagerService from "./ProductManager.js";
+import ticketModel from "../../models/tickets.model.js";
+
+const productManager = new ProductManagerService();
 
 export default class CartManagerService {
   constructor() {}
@@ -14,9 +18,11 @@ export default class CartManagerService {
   };
 
   //CREATE A CART
-  addCart = async (newCart) => {
+  addCart = async () => {
     try {
-      const cart = await cartModel.create(newCart);
+      const cart = await cartModel.create({
+        products:[]
+      });
       return {
         message: `New cart created successfully Cart ID: ${cart._id}`,
         cart
@@ -32,6 +38,7 @@ export default class CartManagerService {
       let cart = await cartModel
         .findOne({ _id: cartId })
         .populate("products.product");
+        console.log(cart)
       if (cart === null) {
         return { message: "Cart not found", cart};
       } else {
@@ -199,6 +206,51 @@ export default class CartManagerService {
         await cartModel.updateOne({ _id: cartId }, { products });
         return {message: 'Quantity Updated successfully', cart};
       }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+    purchaseOrder = async (cartId) => {
+    try {
+      let cart = await cartModel
+        .findOne({ _id: cartId })
+        .populate("products.product").lean();
+      if (cart === null) return { message: "Cart not found", cart};
+
+      let products = cart.products;
+      if (!products.length) return { message: "Cart is empty, lets add a product", cart};
+
+     products = products.map((product) => {
+        let productStock = product.product.stock;
+        let quantity = product.quantity;
+        let productId = product.product._id
+        let stock = productStock - quantity
+
+        console.log("test", productStock, quantity, stock)
+
+        if(stock <= 0){
+          console.log("productos sin stock", productId)
+          // borra el producto que la cantidad supere el stock
+          let productToRemove = products.findIndex(
+            (product) => product._id === productId
+          );
+          products.splice(productToRemove);
+        }else{
+          console.log("ids de productos con stock", productId)          
+          product.product.stock = productStock - quantity
+
+          //Actualizar producto con la  nueva cantidad de stock
+           productManager.updateProduct(productId, product.product)
+
+          return product
+        }
+      })
+
+      await cartModel.updateOne({ _id: cartId }, { products });
+
+      return {message: 'Order Placed Successfully', cart};
+
     } catch (error) {
       console.error(error);
     }

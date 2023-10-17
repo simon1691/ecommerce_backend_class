@@ -14,8 +14,7 @@ export const getAllCarts = async (req, res) => {
 
 export const addCart = async (req, res) => {
   try {
-    const cart = req.body;
-    const newCart = await cartManager.addCart(cart);
+    const newCart = await cartManager.addCart();
     res
       .status(201)
       .send({ payload: newCart });
@@ -130,4 +129,19 @@ export const updateProductsInCart = async (req, res) => {
   }
 }
 
+export const purchaseOrder = async (req, res) => {
+  try {
+      let cartId = req.params.cid;
+      let payload = await cartManager.purchaseOrder(cartId);
+      res.status(200).send({ payload})
 
+      res.cookie("carritoDeUsuario", payload.cart, {
+        maxAge: 60000,
+        httpOnly: true, // No se expone la cookie
+        // httpOnly: false // expone la cookie
+      });
+
+  } catch (error) {
+    console.error(error);
+  }
+};

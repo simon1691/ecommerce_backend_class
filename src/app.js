@@ -1,9 +1,10 @@
 import express from 'express';
 import __dirname from './utils.js'
 import handlebars from 'express-handlebars'
-import mongoose from 'mongoose';
 import config from './config/config.js';
 import MongoSingleton from './config/mongodb-singleton.js';
+import { PRIVATE_KEY } from './utils.js';
+import cookieParser from 'cookie-parser';
 
 //routers
 import viewsRoutes from './routers/views.routes.js'
@@ -45,6 +46,8 @@ app.use(session({
 initializePassport();
 app.use(passport.initialize())
 app.use(passport.session())
+
+app.use(cookieParser(PRIVATE_KEY));
 
 //Routers
 app.use('/', viewsRoutes)

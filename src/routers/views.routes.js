@@ -1,6 +1,8 @@
 import { Router } from "express";
 import ProductManager from "../services/dao/mongoDb/ProductManager.js";
 import productModel from "../services/models/products.model.js";
+import passport from "passport";
+import { verifyJWT } from "../utils.js";
 
 const router = Router();
 
@@ -16,14 +18,10 @@ router.get("/register", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    if (req.session.user) {
+    if (req.cookies['jwtCookieToken']) {
+      let user = verifyJWT( req.cookies['jwtCookieToken'])
+      console.log("desdee views", user)
       const productsList = await productManager.getProducts();
-      const user = req.session.user;
-      console.log(user)
-
-      if (user.email === "adminCoder@coder.com") {
-        user.admin = true;
-      }
       res.render("home", {
         areProducts: productsList.length,
         productsList,
@@ -37,7 +35,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/products", async (req, res) => {
+router.get("/products", passport.authenticate("jwt", { session:false }), async (req, res) => {
   try {
     let page = parseInt(req.query.page);
     let sort = req.query.sort;

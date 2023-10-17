@@ -3,11 +3,33 @@ import passportLocal from "passport-local";
 import { createHash, isValidPassword } from "../utils.js";
 import userModel from "../services/models/users.model.js";
 import GitHubStrategy from "passport-github2";
+import jwtStrategy from 'passport-jwt'
+import { PRIVATE_KEY, cookieExtractor} from "../utils.js";
+import cartModel from "../services/models/carts.model.js";
 
 // declaracion de estrategia (local)
 const localStrategy = passportLocal.Strategy;
+const JwtStrategy = jwtStrategy.Strategy;
+const ExtractJWT = jwtStrategy.ExtractJwt;
 
 const initializePassport = () => {
+
+  passport.use('jwt', new JwtStrategy(
+    {
+        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]), 
+        secretOrKey: PRIVATE_KEY
+    }, async (jwt_payload, done) => {
+        console.log("Entrando a passport Strategy con JWT.");
+        try {
+            console.log("JWT obtenido del payload");
+            console.log(jwt_payload);
+            return done(null, jwt_payload.user);
+        } catch (error) {
+            console.error(error);
+            return done(error);
+        }
+    }
+));
   // github strategy
   passport.use(
     "github",
@@ -61,9 +83,7 @@ const initializePassport = () => {
         try {
           const exist = await userModel.findOne({ email });
           if (exist) {
-            return res
-              .status(400)
-              .send({ status: "error", message: "Usuario ya existe" });
+            return done(null, false, 'Usuario ya existe!');
           }
           const user = {
             first_name,
@@ -71,15 +91,14 @@ const initializePassport = () => {
             email,
             age,
             password: createHash(password),
+            carts : await cartModel.create({
+              products: []
+            })
           };
 
           const result = await userModel.create(user);
-          res.status(200).send({
-            status: "Success",
-            message: "el Usuario se ha creado con exito" + result.first_name,
-          });
 
-          return done(null, result);
+          return done(null, result, 'Usuario creado correctamente');
         } catch (error) {
           return done("Error registrando el usuario: " + error);
         }

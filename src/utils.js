@@ -1,5 +1,6 @@
 import {fileURLToPath} from 'url';
 import { dirname } from 'path';
+import jwt from 'jsonwebtoken';
 
 import bcrypt from 'bcrypt';
 
@@ -12,5 +13,27 @@ export const isValidPassword = (user,pass) => {
     console.log(user.password, pass)
     return bcrypt.compareSync(pass, user.password)
 }
+
+export const PRIVATE_KEY = "sapBackendSecretKey";
+
+export const createJWT = (user) => {
+    return jwt.sign({user}, PRIVATE_KEY, {expiresIn: '12000000000s'}); 
+     //-->Token generado con duracion en segundos.
+};
+
+export const verifyJWT = (token) => {
+    let payload = jwt.verify(token, PRIVATE_KEY);
+    return payload.user;
+}
+
+export const cookieExtractor = req => {
+    let token = null;
+    if (req && req.cookies) {
+        console.log(req.cookies);
+        token = req.cookies['jwtCookieToken'];
+    }
+    return token;
+};
+
 
 export default __dirname;
