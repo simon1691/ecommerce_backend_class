@@ -10,7 +10,6 @@ export default class UserManagerService {
     
 
     if (!user) {
-      console.log("entreo por el usuario no encontrado");
       return {
         success: false,
         status: 401,

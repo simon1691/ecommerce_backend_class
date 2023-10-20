@@ -1,8 +1,9 @@
 import cartModel from "../../models/carts.model.js";
 import ProductManagerService from "./ProductManager.js";
-import ticketModel from "../../models/tickets.model.js";
+import TicketManagerService from "./TicketManager.js";
 
 const productManager = new ProductManagerService();
+const ticketManager = new TicketManagerService();
 
 export default class CartManagerService {
   constructor() {}
@@ -38,7 +39,6 @@ export default class CartManagerService {
       let cart = await cartModel
         .findOne({ _id: cartId })
         .populate("products.product");
-        console.log(cart)
       if (cart === null) {
         return { message: "Cart not found", cart};
       } else {
@@ -211,45 +211,49 @@ export default class CartManagerService {
     }
   };
 
-    purchaseOrder = async (cartId) => {
+    purchaseOrder = async (cartId, user) => {
     try {
+      
       let cart = await cartModel
         .findOne({ _id: cartId })
         .populate("products.product").lean();
+       //validations cart
       if (cart === null) return { message: "Cart not found", cart};
-
+       //validations Products in cart
       let products = cart.products;
       if (!products.length) return { message: "Cart is empty, lets add a product", cart};
 
-     products = products.map((product) => {
-        let productStock = product.product.stock;
-        let quantity = product.quantity;
-        let productId = product.product._id
-        let stock = productStock - quantity
+      let productsWithStock = products.filter((product) => product.product.stock >= product.quantity);
+      let productsWithoutStock = products.filter((product) => product.product.stock < product.quantity);
+      let purchaser = user
+      let cartTotalAmount = productsWithStock.reduce((acc, product) => acc + product.quantity * product.product.price, 0);
 
-        console.log("test", productStock, quantity, stock)
+      if (productsWithStock.length > 0){
+          productsWithStock.forEach((product) => {
+            product.product.stock = product.product.stock - product.quantity
+            // Actualiza el stock del producto con la nueva cantidad de stock
+            productManager.updateProduct(product.product._id, product.product)
+          })
+          // Deja en el carrito solo los productos que no se pudieron procesar
+          if(productsWithoutStock.length > 0) {
+            products = productsWithoutStock
+          }
+          
+          let ticket = await ticketManager.createTicket({
+            amount: cartTotalAmount,
+            purchaser: purchaser.email
+          });
 
-        if(stock <= 0){
-          console.log("productos sin stock", productId)
-          // borra el producto que la cantidad supere el stock
-          let productToRemove = products.findIndex(
-            (product) => product._id === productId
-          );
-          products.splice(productToRemove);
-        }else{
-          console.log("ids de productos con stock", productId)          
-          product.product.stock = productStock - quantity
+          await cartModel.updateOne({ _id: cartId }, { products: products });
 
-          //Actualizar producto con la  nueva cantidad de stock
-           productManager.updateProduct(productId, product.product)
+          return {message: 'Order Placed Successfully', ticketInfo: ticket, unprocessedProducts: {cart: cart}};
+      }
 
-          return product
-        }
-      })
-
-      await cartModel.updateOne({ _id: cartId }, { products });
-
-      return {message: 'Order Placed Successfully', cart};
+      if(productsWithoutStock.length > 0){
+        products = productsWithoutStock;
+        cartModel.updateOne({ _id: cartId }, { products: products });
+        return {message: 'Order could not be processed',  unprocessedProducts: {cart: cart}};
+      }
 
     } catch (error) {
       console.error(error);

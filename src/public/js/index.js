@@ -1,6 +1,5 @@
  const getId = (e) => {
     let idProduct = e.target.id
-    console.log(idProduct)
 }
 
 const logout = document.getElementById('logout')

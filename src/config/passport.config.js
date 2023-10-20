@@ -19,10 +19,7 @@ const initializePassport = () => {
         jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]), 
         secretOrKey: PRIVATE_KEY
     }, async (jwt_payload, done) => {
-        console.log("Entrando a passport Strategy con JWT.");
         try {
-            console.log("JWT obtenido del payload");
-            console.log(jwt_payload);
             return done(null, jwt_payload.user);
         } catch (error) {
             console.error(error);
@@ -40,16 +37,9 @@ const initializePassport = () => {
         callbackUrl: "http://localhost:8181/api/sessions/githubcallback"
       },
       async (accessToken, refreshToken, profile, done) => {
-        console.log("name",profile._json.name);
-
         try {
           const user = await userModel.findOne({ email: profile._json.email });
-          console.log("Usuario encontrado para login:");
-
           if (!user) {
-            console.log(
-              "El usuario no existe: " + profile._json.email
-            );
             let newUser = {
               first_name: profile._json.name,
               last_name: "",

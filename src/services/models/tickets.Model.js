@@ -5,7 +5,6 @@ const ticketsCollection = 'ticket';
 const ticketScheme = new mongoose.Schema({
     code: {
         type: String,
-        required: true,
         default: () => Math.random().toString(36).substring(7),
     },
     purchase_datatime: {
@@ -15,7 +14,6 @@ const ticketScheme = new mongoose.Schema({
     amount: Number,
     purchaser: {
         type:String,
-        required: true
     }
 })
 

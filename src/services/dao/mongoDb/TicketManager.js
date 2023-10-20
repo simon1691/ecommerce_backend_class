@@ -1,17 +1,15 @@
 import ticketModel from "../../models/tickets.model.js";
 
 export default class TicketManagerServices{
-    constructor(){
+    constructor(){}
 
-    }
-
-    createTicket = async (req, res) => {
+    createTicket = async (ticketInfo) => {
       try {
-        const newTicket = await ticketModel.create(req.body);
-        res.status(201).send({ payload: newTicket });
+        const newTicket = await ticketModel.create(ticketInfo);
+        return {message: "Ticket created successfully", ticket: newTicket};
       } catch (error) {
         console.error("request error: " + error);
-        res.status(500).send({ error: error });
+        return {"message": "Ticket no created"};
       }
     }
 

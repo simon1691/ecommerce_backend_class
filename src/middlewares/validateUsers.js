@@ -3,7 +3,6 @@ import { verifyJWT } from "../utils.js"
 
 export const validateUser = async (req, res, next ) => {
     let user = verifyJWT(req.cookies['jwtCookieToken'])
-    console.log(user)
     if (user && user.role === 'user') {
         return next()
     }
@@ -12,7 +11,6 @@ export const validateUser = async (req, res, next ) => {
 
 export const validateAdmin = async (req, res, next ) => {
     let user = verifyJWT(req.cookies['jwtCookieToken'])
-    console.log(user)
     if (user && user.role === 'admin') {
         return next()
     }

@@ -20,7 +20,6 @@ router.get("/", async (req, res) => {
   try {
     if (req.cookies['jwtCookieToken']) {
       let user = verifyJWT( req.cookies['jwtCookieToken'])
-      console.log("desdee views", user)
       const productsList = await productManager.getProducts();
       res.render("home", {
         areProducts: productsList.length,

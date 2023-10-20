@@ -1,6 +1,9 @@
 import CartManagerServices from "../services/dao/mongoDb/CartManager.js";
+import TicketManagerService from "../services/dao/mongoDb/TicketManager.js";
+import { verifyJWT } from "../utils.js";
 
 const cartManager = new CartManagerServices();
+const ticketManager = new TicketManagerService();
 
 export const getAllCarts = async (req, res) => {
   try {
@@ -131,16 +134,10 @@ export const updateProductsInCart = async (req, res) => {
 
 export const purchaseOrder = async (req, res) => {
   try {
+      let user = verifyJWT( req.cookies['jwtCookieToken'])
       let cartId = req.params.cid;
-      let payload = await cartManager.purchaseOrder(cartId);
-      res.status(200).send({ payload})
-
-      res.cookie("carritoDeUsuario", payload.cart, {
-        maxAge: 60000,
-        httpOnly: true, // No se expone la cookie
-        // httpOnly: false // expone la cookie
-      });
-
+      let payload = await cartManager.purchaseOrder(cartId, user);
+      res.status(200).send({payload})
   } catch (error) {
     console.error(error);
   }

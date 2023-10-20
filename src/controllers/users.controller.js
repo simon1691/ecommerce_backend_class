@@ -5,10 +5,8 @@ const usersManager = new UserManagerService();
 
 export const login = async (req, res) => {
   try {
-    console.log(req.body);
     const { email, password } = req.body;
     const payload = await usersManager.login(email, password);
-    console.log("payload",payload);
     req.user = payload.user;
 
     if (payload.success === true) {
@@ -19,7 +17,6 @@ export const login = async (req, res) => {
         role: user.role,
         carts: user.carts
       };
-      console.log(tokenUser);
       const accessToken = createJWT(tokenUser);
 
       res.cookie("jwtCookieToken", accessToken, {
