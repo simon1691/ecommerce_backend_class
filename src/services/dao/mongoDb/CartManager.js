@@ -22,11 +22,11 @@ export default class CartManagerService {
   addCart = async () => {
     try {
       const cart = await cartModel.create({
-        products:[]
+        products: [],
       });
       return {
         message: `New cart created successfully Cart ID: ${cart._id}`,
-        cart
+        cart,
       };
     } catch (error) {
       console.error(error);
@@ -40,13 +40,13 @@ export default class CartManagerService {
         .findOne({ _id: cartId })
         .populate("products.product");
       if (cart === null) {
-        return { message: "Cart not found", cart};
+        return { message: "Cart not found", cart };
       } else {
         let products = cart.products;
         if (!products.length) {
-          return { message: "Cart is empty, lets add a product", cart};
+          return { message: "Cart is empty, lets add a product", cart };
         }
-        return { message: "Cart found", cart};
+        return { message: "Cart found", cart };
       }
     } catch (error) {
       console.error(error);
@@ -58,7 +58,7 @@ export default class CartManagerService {
     try {
       let cart = await cartModel.findOne({ _id: cartId });
       if (cart === null) {
-        return { message: "Cart not found", cart};
+        return { message: "Cart not found", cart };
       } else {
         let products = cart.products;
 
@@ -73,15 +73,15 @@ export default class CartManagerService {
               { arrayFilters: [{ "product._id": existingProduct._id }] }
             );
             cart = await cartModel.findOne({ _id: cartId });
-            return { message: 'Product Quantity increased', cart};
+            return { message: "Product Quantity increased", cart };
           }
           products.push({ product: productId });
           await cartModel.updateOne({ _id: cartId }, { products });
-          return { message: 'Product Added', cart};
+          return { message: "Product Added", cart };
         }
         products.push({ product: productId });
         await cartModel.updateOne({ _id: cartId }, { products });
-        return { message: 'Product Added', cart};
+        return { message: "Product Added", cart };
       }
     } catch (error) {
       console.error(error);
@@ -107,7 +107,7 @@ export default class CartManagerService {
               { arrayFilters: [{ "product._id": existingProduct._id }] }
             );
             cart = await cartModel.findOne({ _id: cartId });
-            return {message: 'Quantity decreased successfully', cart};
+            return { message: "Quantity decreased successfully", cart };
           } else {
             let productToRemove = products.findIndex(
               (product) => product._id === productId
@@ -122,13 +122,13 @@ export default class CartManagerService {
               };
             }
             await cartModel.updateOne({ _id: cartId }, { products });
-            return { message: "Cart is empty, lets add a product", cart};
+            return { message: "Cart is empty, lets add a product", cart };
           }
         } else {
           return {
             message:
               "The Product does not exists or was already removed from cart",
-              cart
+            cart,
           };
         }
       }
@@ -142,10 +142,10 @@ export default class CartManagerService {
     try {
       let cart = await cartModel.findOne({ _id: cartId });
       if (cart === null) {
-        return { message: "Cart not found", cart};
+        return { message: "Cart not found", cart };
       } else {
         await cartModel.findOneAndDelete({ _id: cartId });
-        return { message: "Cart and products deleted successfully", cart};
+        return { message: "Cart and products deleted successfully", cart };
       }
     } catch (error) {
       console.error(error);
@@ -165,7 +165,7 @@ export default class CartManagerService {
         if (!products.length) {
           return { message: "Cart is empty, lets add a product", cart };
         }
-        return { message: 'Cart Updated Successfully', cart };
+        return { message: "Cart Updated Successfully", cart };
       }
     } catch (error) {
       console.error(error);
@@ -200,61 +200,75 @@ export default class CartManagerService {
           }
           products.push({ product: productId });
           await cartModel.updateOne({ _id: cartId }, { products });
-          return {message: 'Quantity Updated successfully', cart};
+          return { message: "Quantity Updated successfully", cart };
         }
         products.push({ product: productId });
         await cartModel.updateOne({ _id: cartId }, { products });
-        return {message: 'Quantity Updated successfully', cart};
+        return { message: "Quantity Updated successfully", cart };
       }
     } catch (error) {
       console.error(error);
     }
   };
 
-    purchaseOrder = async (cartId, user) => {
+  purchaseOrder = async (cartId, user) => {
     try {
-      
       let cart = await cartModel
         .findOne({ _id: cartId })
-        .populate("products.product").lean();
-       //validations cart
-      if (cart === null) return { message: "Cart not found", cart};
-       //validations Products in cart
+        .populate("products.product")
+        .lean();
+      //validations cart
+      if (cart === null) return { message: "Cart not found", cart };
+      //validations Products in cart
       let products = cart.products;
-      if (!products.length) return { message: "Cart is empty, lets add a product", cart};
+      if (!products.length)
+        return { message: "Cart is empty, lets add a product", cart };
 
-      let productsWithStock = products.filter((product) => product.product.stock >= product.quantity);
-      let productsWithoutStock = products.filter((product) => product.product.stock < product.quantity);
-      let purchaser = user
-      let cartTotalAmount = productsWithStock.reduce((acc, product) => acc + product.quantity * product.product.price, 0);
+      let productsWithStock = products.filter(
+        (product) => product.product.stock >= product.quantity
+      );
+      let productsWithoutStock = products.filter(
+        (product) => product.product.stock < product.quantity
+      );
+      let purchaser = user;
+      let cartTotalAmount = productsWithStock.reduce(
+        (acc, product) => acc + product.quantity * product.product.price,
+        0
+      );
 
-      if (productsWithStock.length > 0){
-          productsWithStock.forEach((product) => {
-            product.product.stock = product.product.stock - product.quantity
-            // Actualiza el stock del producto con la nueva cantidad de stock
-            productManager.updateProduct(product.product._id, product.product)
-          })
-          // Deja en el carrito solo los productos que no se pudieron procesar
-          if(productsWithoutStock.length > 0) {
-            products = productsWithoutStock
-          }
-          
-          let ticket = await ticketManager.createTicket({
-            amount: cartTotalAmount,
-            purchaser: purchaser.email
-          });
+      if (productsWithStock.length > 0) {
+        productsWithStock.forEach((product) => {
+          product.product.stock = product.product.stock - product.quantity;
+          // Actualiza el stock del producto con la nueva cantidad de stock
+          productManager.updateProduct(product.product._id, product.product);
+        });
+        // Deja en el carrito solo los productos que no se pudieron procesar
+        if (productsWithoutStock.length > 0) {
+          products = productsWithoutStock;
+        }
 
-          await cartModel.updateOne({ _id: cartId }, { products: products });
+        let ticket = await ticketManager.createTicket({
+          amount: cartTotalAmount,
+          purchaser: purchaser.email,
+        });
 
-          return {message: 'Order Placed Successfully', ticketInfo: ticket, unprocessedProducts: {cart: cart}};
+        await cartModel.updateOne({ _id: cartId }, { products: products });
+
+        return {
+          message: "Order Placed Successfully",
+          ticketInfo: ticket,
+          unprocessedProducts: { cart: cart },
+        };
       }
 
-      if(productsWithoutStock.length > 0){
+      if (productsWithoutStock.length > 0) {
         products = productsWithoutStock;
         cartModel.updateOne({ _id: cartId }, { products: products });
-        return {message: 'Order could not be processed',  unprocessedProducts: {cart: cart}};
+        return {
+          message: "Order could not be processed",
+          unprocessedProducts: { cart: cart },
+        };
       }
-
     } catch (error) {
       console.error(error);
     }

@@ -5,8 +5,28 @@ export default class ProductManagerService {
 
   addProduct = async (product) => {
     try {
-      await productModel.create(product);
-      return product
+      //check if the product code was provided
+      if (product.code === undefined || product.code === null) {
+        return {
+          status: "error",
+          codeExists: false,
+        };
+      }
+      //check if the product code already exists
+      let productExists = await productModel.findOne({ code: product.code });
+      if (productExists) {
+        return {
+          status: "error",
+          codeExists: true,
+        };
+      }
+      // if all goes well, create the new product
+      const newProduct = await productModel.create(product);
+      return {
+        message: `New product added successfully Product ID: ${newProduct._id}`,
+        status: "success",
+        product: newProduct,
+      };
     } catch (error) {
       console.error("error " + error);
     }
@@ -51,8 +71,11 @@ export default class ProductManagerService {
   };
   deleteProduct = async (id) => {
     try {
-      const productToDelete = await productModel.deleteOne({ _id: id }).lean();
-      return productToDelete;
+      await productModel.deleteOne({ _id: id }).lean();
+      return {
+        message: "Product deleted successfully!",
+        status: "success",
+      };
     } catch (error) {
       console.error("error " + error);
     }
