@@ -1,0 +1,13 @@
+error: Prueba de log level error2!
+fatal: Prueba de log level fatal!
+error: 
+error: Cannot read properties of undefined (reading 'status')
+error: Cannot read properties of undefined (reading 'status')
+error: undefined
+error: undefined
+error: undefined
+error: Cannot read properties of undefined (reading 'status')
+error: Cannot read properties of undefined (reading 'status')
+error: The product with the given code already exists {"error":2}
+error: The product with the given code already exists {"error":2}
+error: Cannot read properties of undefined (reading 'status')

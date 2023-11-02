@@ -60,7 +60,7 @@ export const getProducts = async (req, res) => {
       user,
     });
   } catch (error) {
-    console.error(error);
+    req.logger.error(error.message);
   }
 };
 
@@ -83,8 +83,7 @@ export const getProductById = async (req, res) => {
       productsList,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).send({ error: error.code, message: error.message });
+    req.logger.error({ error: error.code, message: error.message });
   }
 };
 
@@ -107,17 +106,21 @@ export const addProduct = async (req, res) => {
     }
     res.status(200).send({ payload: newProduct });
   } catch (error) {
-    res.status(500).send({ error: error.code, message: error.message });
+    req.logger.error({ error: error.code, message: error.message });
   }
 };
 
 export const updateProduct = async (req, res) => {
   try {
     let productToUpdate = req.body;
+    console.log(productToUpdate);
+    if(Object.keys(productToUpdate).length === 0) {
+      req.logger.warning("there is not any product data to update");
+    }
     await productManager.updateProduct(req.params.pid, productToUpdate);
     res.json(productToUpdate);
   } catch (error) {
-    console.error(error);
+    req.logger.error(error.message);
   }
 };
 
@@ -125,7 +128,7 @@ export const deleteProduct = async (req, res) => {
   try {
 
     let productToDelete = await productManager.deleteProduct(req.params.pid);
-    console.log(productToDelete);
+    
     //check if the new product was not deleted
     if (productToDelete.status != "success") {
       CustomError.createError({
@@ -138,6 +141,6 @@ export const deleteProduct = async (req, res) => {
     }
     res.status(200).send({ payload: productToDelete });
   } catch (error) {
-    console.error(error);
+    req.logger.error(error.message);
   }
 };
