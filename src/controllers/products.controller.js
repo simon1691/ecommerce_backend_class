@@ -13,6 +13,9 @@ export const getProducts = async (req, res) => {
     let filterBy = req.query.filterBy;
     let filter = req.query.filter;
     let user = req.session.user;
+
+    req.logger.info("Calling the products");
+
     let productsList = await productManager.getProducts(
       limit,
       sort,
@@ -20,28 +23,15 @@ export const getProducts = async (req, res) => {
       filter,
       filterBy
     );
-    if (!productsList || productsList.length === 0) {
-      return CustomError.createError({
-        name: "No products found",
-        message: "No products found",
-        code: EErrors.INVALID_TYPES,
-        cause: "Unable to retrieve products from the database",
-      });
-    }
+
+    productsList.length === 0 ? req.logger.info("No products in list") : req.logger.info("Products in list"); 
+
     // Page
     if (page) {
       let productsList = await productModel.paginate(
         filterBy ? { [filterBy]: filter } : "",
         { page, limit: 5, lean: true, sort: sort ? { [sortBy]: sort } : {} }
       );
-      if (!productsList || productsList.length === 0) {
-        return CustomError.createError({
-          name: "No products found",
-          message: "No products found",
-          code: EErros.INVALID_TYPES,
-          cause: "Unable to retrieve products from the database",
-        });
-      }
       productsList.prevLink = productsList.hasPrevPage
         ? `http://localhost:8181/api/products/?page=${productsList.prevPage}`
         : null;
@@ -60,7 +50,77 @@ export const getProducts = async (req, res) => {
       user,
     });
   } catch (error) {
-    req.logger.error(error.message);
+    req.logger.error(error.message, {
+      stack: error.stack,
+    });
+  }
+};
+
+export const addProduct = async (req, res) => {
+  try {
+    let { title, description, thumbnail, price, code, stock, category } =
+      req.body;
+
+    // check if any value is empty and throw and error
+    if (
+      !title ||
+      !description ||
+      !thumbnail ||
+      !price ||
+      !code ||
+      !stock ||
+      !category
+    ) {
+      res.status(400).send({
+        payload: {
+          message: "Please fill all the required fields",
+          success: false,
+        },
+      });
+      CustomError.createError({
+        name: "Missing Product Data",
+        message:
+          "The Information  provided to add a new product is missing one or more of the required fields",
+        code: EErrors.INVALID_TYPES,
+        cause:
+          "The product data is not valid one or more product fields are missing",
+      });
+    }
+
+    let newProduct = await productManager.addProduct({
+      title,
+      description,
+      thumbnail,
+      price,
+      code,
+      stock,
+      category,
+    });
+
+    if (!newProduct) {
+      req.logger.warning("Product Already Exists");
+      res.status(400).send({
+        payload: {
+          message: "Product Already Exists",
+          success: false,
+        },
+      });
+      return;
+    }
+    req.logger.info(`New Product Added ${newProduct}`);
+
+    res.status(201).send({
+      payload: {
+        product: newProduct,
+        success: true,
+      },
+    });
+  } catch (error) {
+    req.logger.error(error.name, {
+      message: error.message,
+      code: error.code,
+      stack: error.stack,
+    });
   }
 };
 
@@ -68,11 +128,18 @@ export const getProductById = async (req, res) => {
   try {
     const productsList = [];
     const productById = await productManager.getProductById(req.params.id);
+
+    //validates that the id returns a product
     if (!productById) {
+      res.status(400).send({
+        payload: {
+          message: "The product not found",
+          success: false,
+        },
+      });
       CustomError.createError({
         name: "Invalid product ID",
-        message:
-          "The product with the given ID does not exist or is not available",
+        message: "The product with the given ID does not exist",
         code: EErrors.INVALID_TYPES,
         cause: "Unable to retrieve products with the given ID",
       });
@@ -83,64 +150,89 @@ export const getProductById = async (req, res) => {
       productsList,
     });
   } catch (error) {
-    req.logger.error({ error: error.code, message: error.message });
-  }
-};
-
-export const addProduct = async (req, res) => {
-  try {
-    let prouctToAdd = req.body;
-    let newProduct = await productManager.addProduct(prouctToAdd);
-
-    //check if the new product was not created
-    if (newProduct.status != "success") {
-      CustomError.createError({
-        name: "No product data provided",
-        message: newProduct.codeExists
-          ? "The product with the given code already exists"
-          : "The product data provided is not valid",
-        code: EErrors.INVALID_TYPES,
-        cause:
-          "The product data provided is not valid so the product could not be saved or created",
-      });
-    }
-    res.status(200).send({ payload: newProduct });
-  } catch (error) {
-    req.logger.error({ error: error.code, message: error.message });
+    req.logger.error(error.name, {
+      message: error.message,
+      code: error.code,
+      stack: error.stack,
+    });
   }
 };
 
 export const updateProduct = async (req, res) => {
   try {
-    let productToUpdate = req.body;
-    console.log(productToUpdate);
-    if(Object.keys(productToUpdate).length === 0) {
-      req.logger.warning("there is not any product data to update");
+    let product = req.body;
+    let productId = req.params.pid;
+    let productUpdated = await productManager.updateProduct(productId, product);
+
+    if (!productUpdated) {
+      res.status(400).send({
+        payload: {
+          message: "The product not found",
+          success: false,
+        },
+      });
+      CustomError.createError({
+        name: "Invalid product ID",
+        message: "The product with the given ID does not exist",
+        code: EErrors.INVALID_TYPES,
+        cause: "Unable to retrieve products with the given ID",
+      });
     }
-    await productManager.updateProduct(req.params.pid, productToUpdate);
-    res.json(productToUpdate);
+
+    res.status(201).send({
+      payload: {
+        message: "Product Updated Successfully",
+        success: true,
+        product: {
+          id: productUpdated._id,
+          ProductName: productUpdated.title,
+        },
+      },
+    });
   } catch (error) {
-    req.logger.error(error.message);
+    req.logger.error(error.name, {
+      message: error.message,
+      code: error.code,
+      stack: error.stack,
+    });
   }
 };
 
 export const deleteProduct = async (req, res) => {
   try {
+    let productId = req.params.pid;
+    let productToDelete = await productManager.deleteProduct(productId);
 
-    let productToDelete = await productManager.deleteProduct(req.params.pid);
-    
     //check if the new product was not deleted
-    if (productToDelete.status != "success") {
+    if (!productToDelete) {
+      res.status(400).send({
+        payload: {
+          message: "Product could not be deleted",
+          success: false,
+        },
+      });
       CustomError.createError({
         name: "Product not deleted",
         message: "The product with the given ID could not be deleted",
         code: EErrors.INVALID_TYPES,
-        cause:
-          "The product with the given ID could not be deleted",
+        cause: "The product with the given ID could not be deleted",
       });
     }
-    res.status(200).send({ payload: productToDelete });
+    res.status(204).send({
+      payload: {
+        message: "Product Deleted Successfully",
+        success: true,
+        product: {
+          id: productToDelete._id,
+          product: productToDelete.title,
+        },
+      },
+    });
   } catch (error) {
-    req.logger.error(error.message);
+    req.logger.error(error.name, {
+      message: error.message,
+      code: error.code,
+      stack: error.stack,
+    });
   }
 };

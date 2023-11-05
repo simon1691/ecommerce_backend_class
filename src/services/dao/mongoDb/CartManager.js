@@ -24,10 +24,7 @@ export default class CartManagerService {
       const cart = await cartModel.create({
         products: [],
       });
-      return {
-        message: `New cart created successfully Cart ID: ${cart._id}`,
-        cart,
-      };
+      return cart;
     } catch (error) {
       console.error(error);
     }
@@ -39,15 +36,7 @@ export default class CartManagerService {
       let cart = await cartModel
         .findOne({ _id: cartId })
         .populate("products.product");
-      if (cart === null) {
-        return { message: "Cart not found", cart };
-      } else {
-        let products = cart.products;
-        if (!products.length) {
-          return { message: "Cart is empty, lets add a product", cart };
-        }
-        return { message: "Cart found", cart };
-      }
+      return cart;
     } catch (error) {
       console.error(error);
     }
@@ -57,11 +46,11 @@ export default class CartManagerService {
   addProductsInCart = async (cartId, productId) => {
     try {
       let cart = await cartModel.findOne({ _id: cartId });
-      if (cart === null) {
-        return { message: "Cart not found", cart };
+      let product = await productManager.getProductById(productId);
+      if (cart === null || product === null) {
+        return cart;
       } else {
         let products = cart.products;
-
         if (products.length) {
           let existingProduct = products.find(
             (product) => product.product == productId
@@ -93,7 +82,7 @@ export default class CartManagerService {
     try {
       let cart = await cartModel.findOne({ _id: cartId });
       if (cart === null) {
-        return { message: "Cart not found", cart: null };
+        return cart;
       } else {
         let products = cart.products;
         let existingProduct = products.find(
@@ -117,7 +106,7 @@ export default class CartManagerService {
               cartModel.findOneAndDelete({ _id: existingProduct.product });
               await cartModel.updateOne({ _id: cartId }, { products });
               return {
-                message: `this Product was removed from cart: ${productId}`,
+                message: `this Product was removed from cart: ${cartId}`,
                 cart,
               };
             }
@@ -142,10 +131,10 @@ export default class CartManagerService {
     try {
       let cart = await cartModel.findOne({ _id: cartId });
       if (cart === null) {
-        return { message: "Cart not found", cart };
+        return cart;
       } else {
         await cartModel.findOneAndDelete({ _id: cartId });
-        return { message: "Cart and products deleted successfully", cart };
+        return cart;
       }
     } catch (error) {
       console.error(error);
@@ -158,15 +147,9 @@ export default class CartManagerService {
       let cart = await cartModel
         .findOne({ _id: cartId })
         .populate("products.product");
-      if (cart === null) {
-        return { message: "Cart not found", cart };
-      } else {
-        let products = cart.products;
-        if (!products.length) {
-          return { message: "Cart is empty, lets add a product", cart };
-        }
-        return { message: "Cart Updated Successfully", cart };
-      }
+
+      if (cart === null) return cart;
+      return cart;
     } catch (error) {
       console.error(error);
     }
@@ -177,7 +160,7 @@ export default class CartManagerService {
     try {
       let cart = await cartModel.findOne({ _id: cartId });
       if (cart === null) {
-        return { message: "Cart not found", cart };
+        cart;
       } else {
         let products = cart.products;
         if (products.length) {
@@ -200,11 +183,11 @@ export default class CartManagerService {
           }
           products.push({ product: productId });
           await cartModel.updateOne({ _id: cartId }, { products });
-          return { message: "Quantity Updated successfully", cart };
+          return cart;
         }
         products.push({ product: productId });
         await cartModel.updateOne({ _id: cartId }, { products });
-        return { message: "Quantity Updated successfully", cart };
+        return cart;
       }
     } catch (error) {
       console.error(error);
@@ -218,11 +201,9 @@ export default class CartManagerService {
         .populate("products.product")
         .lean();
       //validations cart
-      if (cart === null) return { message: "Cart not found", cart };
-      //validations Products in cart
+      if (!cart) return cart;
+
       let products = cart.products;
-      if (!products.length)
-        return { message: "Cart is empty, lets add a product", cart };
 
       let productsWithStock = products.filter(
         (product) => product.product.stock >= product.quantity
@@ -230,6 +211,7 @@ export default class CartManagerService {
       let productsWithoutStock = products.filter(
         (product) => product.product.stock < product.quantity
       );
+
       let purchaser = user;
       let cartTotalAmount = productsWithStock.reduce(
         (acc, product) => acc + product.quantity * product.product.price,
@@ -254,20 +236,13 @@ export default class CartManagerService {
 
         await cartModel.updateOne({ _id: cartId }, { products: products });
 
-        return {
-          message: "Order Placed Successfully",
-          ticketInfo: ticket,
-          unprocessedProducts: { cart: cart },
-        };
+        return { ticket, cart };
       }
 
       if (productsWithoutStock.length > 0) {
         products = productsWithoutStock;
         cartModel.updateOne({ _id: cartId }, { products: products });
-        return {
-          message: "Order could not be processed",
-          unprocessedProducts: { cart: cart },
-        };
+        return cart;
       }
     } catch (error) {
       console.error(error);

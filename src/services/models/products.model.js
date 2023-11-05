@@ -5,7 +5,7 @@ const productsCollections = 'products'
 
 const  productSchema =  new mongoose.Schema({
     title: String,
-    desciption: String,
+    description: String,
     thumbnail: String,
     price: Number,
     code: {
@@ -13,7 +13,8 @@ const  productSchema =  new mongoose.Schema({
         unique: true,
         required: true,
     },
-    stock: Number
+    stock: Number,
+    category: String
 })
 productSchema.plugin(mongoosePaginate);
 const productModel = mongoose.model(productsCollections, productSchema)
