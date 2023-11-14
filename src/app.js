@@ -14,6 +14,7 @@ import cartsRoutes from './routers/carts.routes.js'
 import sessionRoutes from './routers/session.routes.js'
 import mockingProductsRoutes from './routers/mockingProducts.routes.js'
 import loggerTestRoutes from './routers/loggerTest.routes.js'
+import usersRoutes from './routers/users.routes.js'
 
 //passport
 import passport from 'passport';
@@ -64,6 +65,7 @@ app.use('/api/products', productsRoutes)
 app.use('/api/carts', cartsRoutes)
 app.use('/mockingproducts', mockingProductsRoutes)
 app.use('/loggerTest', loggerTestRoutes)
+app.use('/api/users',usersRoutes)
 
 //Configuracion handlebars
 app.engine('handlebars', handlebars.engine());

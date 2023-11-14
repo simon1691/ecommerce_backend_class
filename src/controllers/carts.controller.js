@@ -107,15 +107,17 @@ export const getCartById = async (req, res) => {
 
 export const addProductsInCart = async (req, res) => {
   try {
+    let owner = verifyJWT(req.cookies["jwtCookieToken"]);
     let cartId = req.params.cid;
     let productId = req.params.pid;
-    let productsToAdd = await cartManager.addProductsInCart(cartId, productId);
+    let productsToAdd = await cartManager.addProductsInCart(cartId, productId, owner.email);
 
-    if (!productsToAdd) {
+    if (!productsToAdd || productsToAdd.ownershipError) {
       res.status(400).send({
         payload: {
-          message: "Product could not be added",
+          message: productsToAdd.ownershipError ? "You own this product therefore it can be added to this cart" : "Product could not be added",
           success: false,
+          ownershipError: productsToAdd.ownershipError ? true : false,
         },
       });
       CustomError.createError({

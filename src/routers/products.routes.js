@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { getProducts, getProductById, addProduct, updateProduct, deleteProduct } from "../controllers/products.controller.js";
-import { validateAdmin } from "../middlewares/validateUsers.js";
+import { validateAdminPremium } from "../middlewares/validateUsers.js";
 
 
 const router = Router();
@@ -11,12 +11,12 @@ router.get("/", getProducts);
 router.get("/:id", getProductById);
 
 //POST
-router.post("/", validateAdmin, addProduct);
+router.post("/", validateAdminPremium, addProduct);
 
 //PUT
-router.put("/:pid", validateAdmin, updateProduct);
+router.put("/:pid", validateAdminPremium, updateProduct);
 
 //DELETE
-router.delete("/:pid", validateAdmin, deleteProduct);
+router.delete("/:pid", validateAdminPremium, deleteProduct);
 
 export default router;

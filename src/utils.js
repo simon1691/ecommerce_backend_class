@@ -10,7 +10,9 @@ const __dirname = dirname(__filename);
 // encriptacion de password
 export const createHash = (pass) =>
   bcrypt.hashSync(pass, bcrypt.genSaltSync(10));
+
 export const isValidPassword = (user, pass) => {
+  console.log(bcrypt.compareSync(pass, user.password));
   return bcrypt.compareSync(pass, user.password);
 };
 

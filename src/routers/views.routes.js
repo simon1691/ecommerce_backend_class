@@ -16,6 +16,10 @@ router.get("/register", async (req, res) => {
   res.render("register");
 });
 
+router.get("/restore-pass", async (req, res) => {
+  res.render("restorePass");
+});
+
 router.get("/", async (req, res) => {
   try {
     if (req.cookies['jwtCookieToken']) {

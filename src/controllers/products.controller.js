@@ -1,3 +1,4 @@
+import { verifyJWT } from "../utils.js";
 import ProductManagerService from "../services/dao/mongoDb/ProductManager.js";
 import CustomError from "../services/errors/customError.js";
 import { EErrors } from "../services/errors/errors-enum.js";
@@ -24,7 +25,9 @@ export const getProducts = async (req, res) => {
       filterBy
     );
 
-    productsList.length === 0 ? req.logger.info("No products in list") : req.logger.info("Products in list"); 
+    productsList.length === 0
+      ? req.logger.info("No products in list")
+      : req.logger.info("Products in list");
 
     // Page
     if (page) {
@@ -58,6 +61,8 @@ export const getProducts = async (req, res) => {
 
 export const addProduct = async (req, res) => {
   try {
+    let owner = verifyJWT(req.cookies["jwtCookieToken"]);
+    console.log(owner);
     let { title, description, thumbnail, price, code, stock, category } =
       req.body;
 
@@ -95,6 +100,7 @@ export const addProduct = async (req, res) => {
       code,
       stock,
       category,
+      owner: owner.email,
     });
 
     if (!newProduct) {
@@ -200,14 +206,38 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
+    let owner = verifyJWT(req.cookies["jwtCookieToken"]);
     let productId = req.params.pid;
-    let productToDelete = await productManager.deleteProduct(productId);
+    let productToDelete;
 
-    //check if the new product was not deleted
+    if (owner.role === "premium") {
+      productToDelete = await productManager.getProductById(productId);
+      if (productToDelete) {
+        if(productToDelete.owner === owner.email) {
+          productToDelete = await productManager.deleteProduct(productId);
+        }else {
+          res.status(400).send({
+            payload: {
+              message: "This product is not owned by you",
+              success: false,
+            },
+          });
+          CustomError.createError({
+            name: "Ownership product",
+            message: `This product is not owned by the ${owner.role} user`,
+            code: EErrors.INVALID_TYPES,
+            cause: "The product is not owned by the user"
+          });
+        }
+      }
+    } else {
+      productToDelete = await productManager.deleteProduct(productId);
+    }
+
     if (!productToDelete) {
       res.status(400).send({
         payload: {
-          message: "Product could not be deleted",
+          message: "Product could not be deleted, or it does not exist",
           success: false,
         },
       });
@@ -218,7 +248,7 @@ export const deleteProduct = async (req, res) => {
         cause: "The product with the given ID could not be deleted",
       });
     }
-    res.status(204).send({
+    res.status(200).send({
       payload: {
         message: "Product Deleted Successfully",
         success: true,

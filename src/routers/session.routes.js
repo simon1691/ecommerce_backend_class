@@ -1,6 +1,7 @@
 import { Router } from "express";
 import passport from 'passport';
-import { login } from "../controllers/users.controller.js";
+import { login, UserPassRecovery } from "../controllers/users.controller.js";
+import MailingService from '../services/mailer/mailer.js';
 
 const router = new Router();
 
@@ -30,32 +31,24 @@ router.post("/register", passport.authenticate('register', { failureRedirect: '/
 })
 
 
+
+
 router.post("/login", login)
 
-// Local strategy
+router.post("/forgot-password", async (req, res) => {
+    let userEmail = req.body.email
+    console.log(userEmail)
+    const email = {
+        from:'SAPECOMMERCE',
+        to: userEmail,
+        subject:"Te has registrado con éxito!",
+        html:`<div><a target="_blank" href="http://localhost:8181//pass-recovery/${userEmail}">Restaura tu contrasena aqui!</a>`
+    }
 
-// router.post("/login", passport.authenticate("login", { failureRedirect: '/api/sessions/fail-login' }), async (req, res) => {
-//     console.log("User found to login:");
-//     const user = req.user;
+    const mailingService = new MailingService();
+    const emailSent = await mailingService.sendSimpleMail(email)
+})
 
-//     if (!user) return res.status(401).send({ status: "error", error: "credenciales incorrectas" });
-//     req.session.user = {
-//         first_name: user.first_name,
-//         last_name: user.last_name,
-//         email: user.email,
-//         age: user.age
-//     }
-//     res.send({ status: "success", payload: req.session.user, message: "¡Primer logueo realizado! :)" });
-// });
-
-
-
-router.get("/fail-register", (req, res) => {
-    res.status(401).send({ error: "Failed to process register!" });
-});
-
-router.get("/fail-login", (req, res) => {
-    res.status(401).send({ error: "Failed to process login!" });
-});
+router.put("/pass-recovery/:email", UserPassRecovery)
 
 export default router;

@@ -5,19 +5,44 @@ import { EErrors } from "../services/errors/errors-enum.js";
 export const validateUser = async (req, res, next) => {
   try {
     let user = verifyJWT(req.cookies["jwtCookieToken"]);
-    if (user && user.role === "user") {
-      return next();
+    if (user.role === "admin") {
+      res.status(403).send({
+        message:  `As ${user.role} user you do not have permission to access this resource`,
+        sucess:false
+      });
+      CustomError.createError({
+        name: "User does not have permission to access this resource",
+        message: `As ${user.role} user you do not have permission to access this resource`,
+        code: EErrors.ROUTING_ERROR,
+        cause: "User does not have permission to access this resource",
+      });
     }
-    res.status(403).send({
-      message: "as Admin you do not have permission to access this resource",
-      sucess:false
+    next();
+  } catch (error) {
+    req.logger.error(error.name, {
+      message: error.message,
+      code: error.code,
     });
-    CustomError.createError({
-      name: "User does not have permission to access this resource",
-      message: "As Admin you do not have permission to access this resource",
-      code: EErrors.ROUTING_ERROR,
-      cause: "User does not have permission to access this resource",
-    });
+  }
+};
+
+export const validateAdminPremium = async (req, res, next) => {
+  try {
+    let user = verifyJWT(req.cookies["jwtCookieToken"]);
+    console.log(user.role)
+    if (user.role === "user") {
+      res.status(403).send({
+        message: "as User you do not have permission to access this resource",
+        sucess:false
+      });
+      CustomError.createError({
+        name: "User does not have permission to access this resource",
+        message: "As User you do not have permission to access this resource",
+        code: EErrors.ROUTING_ERROR,
+        cause: "User does not have permission to access this resource",
+      });
+    }
+    next();
   } catch (error) {
     req.logger.error(error.name, {
       message: error.message,
@@ -29,19 +54,20 @@ export const validateUser = async (req, res, next) => {
 export const validateAdmin = async (req, res, next) => {
   try {
     let user = verifyJWT(req.cookies["jwtCookieToken"]);
-    if (user && user.role === "admin") {
-      return next();
+    console.log(user.role)
+    if (user.role === "user" || user.role === "premium") {
+      res.status(403).send({
+        message: `As ${user.role} user you do not have permission to access this resource`,
+        sucess:false
+      });
+      CustomError.createError({
+        name: "User does not have permission to access this resource",
+        message: "As User you do not have permission to access this resource",
+        code: EErrors.ROUTING_ERROR,
+        cause: "User does not have permission to access this resource",
+      });
     }
-    res.status(403).send({
-      message: "as User you do not have permission to access this resource",
-      sucess:false
-    });
-    CustomError.createError({
-      name: "User does not have permission to access this resource",
-      message: "As User you do not have permission to access this resource",
-      code: EErrors.ROUTING_ERROR,
-      cause: "User does not have permission to access this resource",
-    });
+    next();
   } catch (error) {
     req.logger.error(error.name, {
       message: error.message,

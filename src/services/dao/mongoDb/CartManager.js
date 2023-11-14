@@ -43,10 +43,13 @@ export default class CartManagerService {
   };
 
   //ADD PRODUCTS TO THE CART
-  addProductsInCart = async (cartId, productId) => {
+  addProductsInCart = async (cartId, productId, owner) => {
     try {
       let cart = await cartModel.findOne({ _id: cartId });
       let product = await productManager.getProductById(productId);
+      if(product.owner === owner) {
+        return {ownershipError: true}
+      }
       if (cart === null || product === null) {
         return cart;
       } else {
