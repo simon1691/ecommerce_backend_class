@@ -1,7 +1,7 @@
 import UserManagerService from "../services/dao/mongoDb/usersManager.js";
 import CustomError from "../services/errors/customError.js";
 import { EErrors } from "../services/errors/errors-enum.js";
-import { createJWT} from "../utils.js";
+import { createJWT, verifyJWT} from "../utils.js";
 
 const usersManager = new UserManagerService();
 
@@ -88,8 +88,8 @@ export const updateUserRole = async (req, res) => {
 
 export const UserPassRecovery = async (req, res) => {
   try {
-    const email = req.params.email;
-    const { password } = req.body;
+    const email = verifyJWT(req.params.email);
+    const  password = req.body.password;
     const userPassUpdated = await usersManager.updatePassword(
       email,
       password

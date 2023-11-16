@@ -62,7 +62,6 @@ export const getProducts = async (req, res) => {
 export const addProduct = async (req, res) => {
   try {
     let owner = verifyJWT(req.cookies["jwtCookieToken"]);
-    console.log(owner);
     let { title, description, thumbnail, price, code, stock, category } =
       req.body;
 

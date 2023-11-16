@@ -29,7 +29,6 @@ export const validateUser = async (req, res, next) => {
 export const validateAdminPremium = async (req, res, next) => {
   try {
     let user = verifyJWT(req.cookies["jwtCookieToken"]);
-    console.log(user.role)
     if (user.role === "user") {
       res.status(403).send({
         message: "as User you do not have permission to access this resource",
@@ -54,7 +53,6 @@ export const validateAdminPremium = async (req, res, next) => {
 export const validateAdmin = async (req, res, next) => {
   try {
     let user = verifyJWT(req.cookies["jwtCookieToken"]);
-    console.log(user.role)
     if (user.role === "user" || user.role === "premium") {
       res.status(403).send({
         message: `As ${user.role} user you do not have permission to access this resource`,

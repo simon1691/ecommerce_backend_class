@@ -16,7 +16,7 @@ router.get("/register", async (req, res) => {
   res.render("register");
 });
 
-router.get("/restore-pass", async (req, res) => {
+router.get("/restore-pass/:email", async (req, res) => {
   res.render("restorePass");
 });
 

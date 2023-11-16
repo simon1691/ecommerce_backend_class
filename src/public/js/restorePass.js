@@ -1,5 +1,9 @@
 const form = document.getElementById('restorePassForm');
 const messageContainer = document.getElementById('messageContainer');
+const urlSearchParams = new URLSearchParams(window.location.search);
+const currentUrl = window.location.href;
+const urlObject = new URL(currentUrl);
+const token = urlObject.pathname.split('/').pop();
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -9,7 +13,7 @@ form.addEventListener('submit', (e) => {
 
     data.forEach((value, key) => restorePassData[key] = value)
 
-    fetch('/api/sessions/pass-recovery', {
+    fetch(`/api/sessions/pass-recovery/${token}`, {
         method: 'PUT',
         body: JSON.stringify(restorePassData),
         headers: {
@@ -19,7 +23,6 @@ form.addEventListener('submit', (e) => {
         response.json()
         .then(data => {
         let payload = data
-        console.log(payload.payload)
 
         if(payload.payload.success){
             messageContainer.classList.remove('error')

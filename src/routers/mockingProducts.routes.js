@@ -23,7 +23,6 @@ router.get("/", async (req, res)=> {
 
     res.send({products: fakeProducts})
    } catch (error) {
-    console.log(error)
     res.status(500).send({error: error, message: "Server Error, not poducts to show"})
    }
 })

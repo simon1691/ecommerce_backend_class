@@ -21,7 +21,6 @@ export default class MailingService {
             html,
             attachments
         })
-        console.log(result);
         return result
     }
 }

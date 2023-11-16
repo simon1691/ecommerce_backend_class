@@ -2,6 +2,7 @@ import { Router } from "express";
 import passport from 'passport';
 import { login, UserPassRecovery } from "../controllers/users.controller.js";
 import MailingService from '../services/mailer/mailer.js';
+import { createJWT } from "../utils.js";
 
 const router = new Router();
 
@@ -37,16 +38,17 @@ router.post("/login", login)
 
 router.post("/forgot-password", async (req, res) => {
     let userEmail = req.body.email
-    console.log(userEmail)
+    let emailHashed = createJWT(userEmail)
     const email = {
         from:'SAPECOMMERCE',
         to: userEmail,
-        subject:"Te has registrado con éxito!",
-        html:`<div><a target="_blank" href="http://localhost:8181//pass-recovery/${userEmail}">Restaura tu contrasena aqui!</a>`
+        subject:"Restaura tu contrasnea!",
+        html:`<div><a target="_blank" href="http://localhost:8181/restore-pass/${emailHashed}">Restaura tu contrasena aqui!</a>`
     }
 
     const mailingService = new MailingService();
     const emailSent = await mailingService.sendSimpleMail(email)
+    res.status(200).send({ status: "success", message: "Email enviado"})
 })
 
 router.put("/pass-recovery/:email", UserPassRecovery)

@@ -1,6 +1,6 @@
 <div class="w-100 position-absolute start-0 left-0 top-0 bottom-0 d-flex justify-content-center align-items-center mb-5">
     <div class="">
-        <h1 class="mb-4 text-center">Bienvenido</h1>
+        <h1 id="login-title" class="mb-4 text-center">Bienvenido</h1>
 
     <form id="loginForm" class="">
         <div class="mb-4">
@@ -9,13 +9,13 @@
             </label>
             <input type="email" id="email" name="email" class="w-100 py-1 px-2 border border-1 rounded border-dark-subtle" placeholder="email@example.com">
         </div>
-        <div class="mb-4">
+        <div id="pass-container" class="mb-4">
         <label for="password" class="fw-medium mb-1">
             Contrasena
         </label>
         <input type="password" id="password" name="password" class="w-100 py-1 px-2 border border-1 rounded border-dark-subtle" placeholder="insert your pass">
         </div>
-        <input class="btn btn-primary w-100" type="submit" value="Ingresar">
+        <input id="btn-submit" class="btn btn-primary w-100" type="submit" value="Ingresar">
     </form>
 
     <a href="/api/sessions/github" class="btn btn-outline-dark w-100 d-flex justify-content-center align-item-center mt-4">
@@ -25,8 +25,8 @@
     <br>
     <small class="text-center d-block">Si no posee una cuenta: <a href="/register">Registrese aqui</a></small>
     <br>
-    {{!-- <br>
-     <small class="text-center d-block">olvidate tu contrasena? <a href="/api/sessions/forgot-password">restaurala aqui</a></small> --}}
+    <br>
+     <small class="text-center d-block">olvidaste tu contrasena? <a id="forgotPassword" href="/api/sessions/forgot-password">restaurala aqui</a></small>
     </div>
    
 </div>
@@ -36,4 +36,4 @@
         color:black;
     }
 </style>
-<script src="js/login.js"></script>
+<script src="/js/login.js"></script>
