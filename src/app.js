@@ -15,6 +15,9 @@ import sessionRoutes from './routers/session.routes.js'
 import mockingProductsRoutes from './routers/mockingProducts.routes.js'
 import loggerTestRoutes from './routers/loggerTest.routes.js'
 import usersRoutes from './routers/users.routes.js'
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUi from'swagger-ui-express';
+
 
 //passport
 import passport from 'passport';
@@ -34,6 +37,21 @@ app.use(addLogger);
 //para que el servidor pueda recibir obj json
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// swagger
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: '3.0.1',
+    info: {
+      title: 'Documentación API Ecommerce SAP',
+      version: '1.0.0',
+      description: 'Documentación API Ecommerce SAP',
+    }
+  },
+  apis: ['./src/docs/**/*.yaml'],
+}
+const specs = swaggerJSDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // para trabajar con archivos estaticos
 app.use(express.static(__dirname + '/public'));
@@ -55,8 +73,6 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.use(cookieParser(PRIVATE_KEY));
-
-
 
 //Routers
 app.use('/', viewsRoutes)

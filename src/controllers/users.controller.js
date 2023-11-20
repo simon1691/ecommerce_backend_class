@@ -39,6 +39,7 @@ export const login = async (req, res) => {
     res.status(200).send({
       success: true,
       message: "User logged in successfully",
+      accessToken: accessToken,
     });
   } catch (error) {
     req.logger.error(error.name, {

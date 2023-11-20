@@ -1,0 +1,19 @@
+paths:
+  /api/carts/{id}:
+    get:
+      summary: Gets the Cart with given id
+      tags:
+        - Carts
+      parameters:
+      - name: id
+        in: path
+        description: path parameter takes the Cart id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Responses whit a payload object with cart and success value in true
+        "404":
+          description: Cart not found Error
+        "500":
+          description: Unexpected error from the server, the request can be managed

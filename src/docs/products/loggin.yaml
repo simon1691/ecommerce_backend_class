@@ -1,0 +1,15 @@
+paths:
+  /api/sessions/login:
+    post:
+      summary: (User, Admin, Premium) login
+      tags:
+        - UserAuth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/AdminLogin'
+      responses:
+        "201":
+          description: user logged in successfully

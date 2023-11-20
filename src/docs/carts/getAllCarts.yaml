@@ -1,0 +1,13 @@
+paths:
+  /api/carts:
+    get:
+      summary: Returns all carts created 
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Successful response! Returns an array of carts list
+        "400":
+          description: A invalid data was supplied
+        "500":
+          description: Unexpected error from the server, the request can be managed

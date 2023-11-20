@@ -47,11 +47,18 @@ export const getProducts = async (req, res) => {
       res.render("products", productsList);
       return;
     }
-    res.render("home", {
-      areProducts: productsList.length,
-      productsList,
-      user,
-    });
+    res.status(200).send({
+      payload: {
+        success: true,
+        productsList: productsList,
+      }
+    })
+    // Use with express-handlebars
+    // res.render("home", {
+    //   areProducts: productsList.length,
+    //   productsList,
+    //   user,
+    // });
   } catch (error) {
     req.logger.error(error.message, {
       stack: error.stack,
@@ -68,8 +75,6 @@ export const addProduct = async (req, res) => {
     // check if any value is empty and throw and error
     if (
       !title ||
-      !description ||
-      !thumbnail ||
       !price ||
       !code ||
       !stock ||
@@ -136,7 +141,7 @@ export const getProductById = async (req, res) => {
 
     //validates that the id returns a product
     if (!productById) {
-      res.status(400).send({
+      res.status(404).send({
         payload: {
           message: "The product not found",
           success: false,
@@ -150,10 +155,17 @@ export const getProductById = async (req, res) => {
       });
     }
     productsList.push(productById);
-    res.render("home", {
-      areProducts: productsList.length,
-      productsList,
-    });
+    res.status(200).send({
+      payload: {
+        success: true,
+        product: productById
+      }
+    }
+  )    // use with express-handlebars
+    // res.render("home", {
+    //   areProducts: productsList.length,
+    //   productsList,
+    // });
   } catch (error) {
     req.logger.error(error.name, {
       message: error.message,
@@ -167,10 +179,33 @@ export const updateProduct = async (req, res) => {
   try {
     let product = req.body;
     let productId = req.params.pid;
-    let productUpdated = await productManager.updateProduct(productId, product);
+
+    if (owner.role === "premium") {
+      productUpdated = await productManager.getProductById(productId);
+      if (productUpdated) {
+        if(productUpdated.owner === owner.email) {
+          productUpdated = await productManager.updateProduct(productId, product);
+        }else {
+          res.status(400).send({
+            payload: {
+              message: "This product is not owned by you",
+              success: false,
+            },
+          });
+          CustomError.createError({
+            name: "Ownership product",
+            message: `This product is not owned by the ${owner.role} user`,
+            code: EErrors.INVALID_TYPES,
+            cause: "The product is not owned by the user"
+          });
+        }
+      }
+    } else {
+      productUpdated = await productManager.updateProduct(productId, product);
+    }
 
     if (!productUpdated) {
-      res.status(400).send({
+      res.status(404).send({
         payload: {
           message: "The product not found",
           success: false,
@@ -234,7 +269,7 @@ export const deleteProduct = async (req, res) => {
     }
 
     if (!productToDelete) {
-      res.status(400).send({
+      res.status(404).send({
         payload: {
           message: "Product could not be deleted, or it does not exist",
           success: false,

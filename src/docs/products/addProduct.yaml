@@ -1,0 +1,19 @@
+paths:
+  /api/products:
+    post:
+      summary: Creates a new product, to create a new product the user must be authenticated as Admin or Premium User
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/newProduct'
+      responses:
+        "201":
+          description: Returns a payload with the success status and the product created.
+        "400":
+          description: Returns a payload with the success status "false" and the message why it fails.
+        "500":
+          description: Unexpected error from the server, the request can be managed

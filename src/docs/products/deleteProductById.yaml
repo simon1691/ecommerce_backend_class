@@ -1,0 +1,21 @@
+paths:
+  /api/products/{id}:
+    delete:
+      summary: Deletes the product with given id, Only Admin or Premium users can delete products
+      tags:
+        - Products
+      parameters:
+      - name: id
+        in: path
+        description: path parameter deletes the product by the given id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Responses whit a payload object with product deleted and success value in true
+        "400":
+          description: Product could not be deleted due to the user is not the owner of the product
+        "404":
+          description: Product not found to be deleted Error
+        "500":
+          description: Unexpected error from the server, the request can be managed

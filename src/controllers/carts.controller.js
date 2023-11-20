@@ -63,7 +63,7 @@ export const getCartById = async (req, res) => {
     const cartFound = await cartManager.getCartById(cartId);
 
     if (!cartFound) {
-      res.status(400).send({
+      res.status(404).send({
         payload: {
           message: "Cart could not be found by the ID provided",
           success: false,
@@ -231,42 +231,42 @@ export const deleteCart = async (req, res) => {
   }
 };
 
-export const updateGetCartById = async (req, res) => {
-  try {
-    let cartId = req.params.cid;
-    let cartToUpdate = await cartManager.updateGetCartById(cartId);
+// export const updateGetCartById = async (req, res) => {
+//   try {
+//     let cartId = req.params.cid;
+//     let cartToUpdate = await cartManager.updateGetCartById(cartId);
 
-    if (!cartToUpdate) {
-      res.status(400).send({
-        payload: {
-          message: "Cart could not be Updated",
-          success: false,
-        },
-      });
-      CustomError.createError({
-        name: "Cart no Updated",
-        message: "The cart could not be Updated",
-        code: EErrors.INVALID_TYPES,
-        cause: "The ID provided do not exist in the database",
-      });
-    }
-    res.status(200).send({
-      payload: {
-        message: "Cart Updated",
-        cartId: cartToUpdate,
-        success: true,
-      },
-    });
-  } catch (error) {
-    req.logger.error(error.name, {
-      message: error.message,
-      code: error.code,
-      stack: error.stack,
-    });
-  }
-};
+//     if (!cartToUpdate) {
+//       res.status(400).send({
+//         payload: {
+//           message: "Cart could not be Updated",
+//           success: false,
+//         },
+//       });
+//       CustomError.createError({
+//         name: "Cart no Updated",
+//         message: "The cart could not be Updated",
+//         code: EErrors.INVALID_TYPES,
+//         cause: "The ID provided do not exist in the database",
+//       });
+//     }
+//     res.status(200).send({
+//       payload: {
+//         message: "Cart Updated",
+//         cartId: cartToUpdate,
+//         success: true,
+//       },
+//     });
+//   } catch (error) {
+//     req.logger.error(error.name, {
+//       message: error.message,
+//       code: error.code,
+//       stack: error.stack,
+//     });
+//   }
+// };
 
-export const updateProductsInCart = async (req, res) => {
+export const addProductQuantityToCart = async (req, res) => {
   try {
     let cartId = req.params.cid;
     let productId = req.params.pid;

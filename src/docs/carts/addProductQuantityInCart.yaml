@@ -1,0 +1,34 @@
+paths:
+  /api/carts/{cartId}/product/{productId}:
+    put:
+      summary: Allows add quantities to a product in the cart
+      tags:
+        - Carts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  minimum: 1
+      parameters:
+      - name: cartId
+        in: path
+        description: path parameter takes the Cart id
+        required: true
+        type: string
+      - name: productId
+        in: path
+        description: path parameter takes the Product id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Responses whit a payload object with cartID, productID, message and success value in true
+        "400":
+          description: Product could not be updated with the quantity
+        "500":
+          description: Unexpected error from the server, the request can be managed

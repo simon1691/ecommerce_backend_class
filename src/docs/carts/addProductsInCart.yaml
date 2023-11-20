@@ -1,0 +1,24 @@
+paths:
+  /api/carts/{cartId}/product/{productId}:
+    post:
+      summary: Adds the given product id to the given id cart, this endpoint can only be used by users types.
+      tags:
+        - Carts
+      parameters:
+      - name: cartId
+        in: path
+        description: path parameter takes the Cart id
+        required: true
+        type: string
+      - name: productId
+        in: path
+        description: path parameter takes the Product id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Responses whit a payload object with cartID, productID, message and success value in true
+        "400":
+          description: Product could not be added
+        "500":
+          description: Unexpected error from the server, the request can be managed

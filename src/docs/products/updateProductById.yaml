@@ -1,0 +1,27 @@
+paths:
+  /api/products/{id}:
+    put:
+      summary: updates the product with given id
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/newProduct'
+      parameters:
+      - name: id
+        in: path
+        description: path parameter takes the product id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Responses whit a payload object with product and success value in true
+        "400":
+          description: Product could not be Updated due to the user is not the owner of the product
+        "404":
+          description: Product not found to be Updated Error
+        "500":
+          description: Unexpected error from the server, the request can be managed

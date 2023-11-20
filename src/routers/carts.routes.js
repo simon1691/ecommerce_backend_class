@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {getAllCarts, addCart, getCartById, addProductsInCart, deleteProductsInCart, deleteCart, updateGetCartById, updateProductsInCart, purchaseOrder} from "../controllers/carts.controller.js";
+import {getAllCarts, addCart, getCartById, addProductsInCart, deleteProductsInCart, deleteCart, addProductQuantityToCart, purchaseOrder} from "../controllers/carts.controller.js";
 import { validateUser } from "../middlewares/validateUsers.js";
 
 const router = Router();
@@ -23,10 +23,10 @@ router.delete("/:cid/product/:pid/", validateUser, deleteProductsInCart);
 router.delete("/:cid", deleteCart);
 
 // Put Mostar Carrito por ID y todos sus productos
-router.put("/:cid", updateGetCartById);
+// router.put("/:cid", updateGetCartById);
 
 // PUT Actualizar quantity en un producto por id a un carrito especificado
-router.put("/:cid/product/:pid/", updateProductsInCart);
+router.put("/:cid/product/:pid/", addProductQuantityToCart);
 
 router.get("/:cid/purchase", purchaseOrder )
 
