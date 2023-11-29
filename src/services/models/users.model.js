@@ -14,8 +14,7 @@ const userScheme = new mongoose.Schema({
     password: String,
     role: {
         type: String,
-        default: "user",
-        required: true
+        default: "admin"
     },
     carts: {
         type: [

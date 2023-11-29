@@ -7,8 +7,10 @@ export const validateUser = async (req, res, next) => {
     let user = verifyJWT(req.cookies["jwtCookieToken"]);
     if (user.role === "admin") {
       res.status(403).send({
-        message:  `As ${user.role} user you do not have permission to access this resource`,
-        sucess:false
+        payload: {          
+          message:  `As ${user.role} user you do not have permission to access this resource`,
+          success:false
+        }
       });
       CustomError.createError({
         name: "User does not have permission to access this resource",
@@ -31,8 +33,10 @@ export const validateAdminPremium = async (req, res, next) => {
     let user = verifyJWT(req.cookies["jwtCookieToken"]);
     if (user.role === "user") {
       res.status(403).send({
-        message: "as User you do not have permission to access this resource",
-        sucess:false
+        payload: {
+          message: "as User you do not have permission to access this resource",
+          success:false
+        }
       });
       CustomError.createError({
         name: "User does not have permission to access this resource",
@@ -55,8 +59,10 @@ export const validateAdmin = async (req, res, next) => {
     let user = verifyJWT(req.cookies["jwtCookieToken"]);
     if (user.role === "user" || user.role === "premium") {
       res.status(403).send({
-        message: `As ${user.role} user you do not have permission to access this resource`,
-        sucess:false
+        payload: {
+          message: `As ${user.role} user you do not have permission to access this resource`,
+          success:false
+        }
       });
       CustomError.createError({
         name: "User does not have permission to access this resource",
