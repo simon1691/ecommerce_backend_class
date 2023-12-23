@@ -1,17 +1,4 @@
-{{#if user.admin}}
-<div class="container-fluid d-flex justify-content-between py-3 px-5 bg-dark mb-5 align-items-center text-white">
-    <p class="pe-2 fw-medium m-0 fs-6">Bienvenido Super Usuario: {{user.first_name}} {{user.last_name}}</p>
-    <button id="logout" type="button" class="btn btn btn-light btn-sm">Logout</button>
-</div>
-
-{{else}}
-<div class="container-fluid d-flex justify-content-between py-3 px-5 bg-primary-subtle mb-5 align-items-center">
-    <p class="pe-2 fw-medium m-0 fs-6">Bienvenido: {{user.first_name}} {{user.last_name}}</p>
-    <button id="logout" type="button" class="btn btn-outline-secondary btn-sm">Logout</button>
-</div>
-{{/if}}
-
-
+{{> nav}}
 <div class="container">
     {{#if areProducts}}
         <h1 class="text-center mb-5">Listado de productos existentes</h1>

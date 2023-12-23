@@ -1,0 +1,24 @@
+
+{{#if user.admin}}
+<div class="container-fluid d-flex justify-content-between py-3 px-5 bg-dark mb-5 align-items-center text-white">
+    <p class="pe-2 fw-medium m-0 fs-6">Bienvenido Super Usuario: {{user.name}}</p>
+    <button id="logout" type="button" class="btn btn btn-light btn-sm">Logout</button>
+</div>
+
+{{else}}
+<div class="container-fluid d-flex justify-content-between py-3 px-5 bg-primary-subtle mb-5 align-items-center">
+    <p class="pe-2 fw-medium m-0 fs-6 w-25">Bienvenido: {{user.name}}</p>
+    <div class="d-flex justify-content-end align-items-center w-50">
+        {{#if productsInCart}}
+            <button id="cart" type="button" class="btn btn btn-light btn-sm mx-2">See Cart</button>
+            {{else}}
+            <button id="cart" type="button" class="btn btn btn-light btn-sm mx-2 d-none">See Cart</button>
+        
+        {{/if}}
+        <button id="logout" type="button" class="btn btn btn-light btn-sm">Logout</button>
+    </div>
+
+</div>
+{{/if}}
+
+<script src="/js/index.js"></script>

@@ -18,6 +18,7 @@ export const validateUser = async (req, res, next) => {
         code: EErrors.ROUTING_ERROR,
         cause: "User does not have permission to access this resource",
       });
+      window.location.replace("/");
     }
     next();
   } catch (error) {
@@ -34,7 +35,7 @@ export const validateAdminPremium = async (req, res, next) => {
     if (user.role === "user") {
       res.status(403).send({
         payload: {
-          message: "as User you do not have permission to access this resource",
+          message: `As ${user.role} user you do not have permission to access this resource`,
           success:false
         }
       });

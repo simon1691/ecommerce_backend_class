@@ -1,0 +1,58 @@
+{{> nav}}
+<div class="container">
+        <div class="row flex-wrap">
+            
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="cart-items-card border rounded bg-white py-3 ps-3 pe-4 me-3">
+                    {{#each productsInCart }}
+                    <div id="product-{{this.product._id}}" class="row align-items-center mb-3">
+                        <div class="col-8">
+                            <h5 class="mb-0">{{this.product.title}}</h3>
+                            <p class="mt-1 mb-0">Price by Unit: ${{this.product.price}}</p>
+                        </div>
+                         <div class="col-4 d-flex align-items-center justify-content-end">
+                            <div class="d-flex flex-column me-3">
+                                <div class="d-flex items-align-center justify-content-center rounded border px-2">
+                                    <button id="less-priduct" class="d-flex items-align-center justify-content-center bg-white border-none rounded">-</button>
+                                     <input id='product-quantity' class="cart-item-quantity text-center" type="text" value="{{this.quantity}}" />
+                                     <button id="'more-product" class="d-flex items-align-center justify-content-center bg-white border-none rounded">+</button>
+                                </div>
+                                <small class="cart-item-stock-text">in stock: {{this.product.stock}} units</small>
+                            </div>
+                            <p id="cartTotal" class="my-0">${{this.total}}</p>
+                         </div>
+                    </div>
+                    <hr>
+                    {{/each}}
+                </div>
+                <div class="cart-checkout-card col-4 p-3 border rounded bg-white ms-3">
+                   <h6>Order summary</h5>
+                </div>
+            </div>
+        
+        </div>
+</div>
+
+<style>
+    body{ background-color: #ededed;}
+    .border-none{border: none;}
+    .cart-checkout-card{
+        width: 30%;
+    }
+    .cart-items-card {
+        width: 70%;
+    }
+    .cart-item-quantity{
+        border: none;
+        outline: none;
+        width: 50px;
+        }
+    .cart-item-quantity-label{font-size: 12px;}
+    .cart-item-stock-text{
+        font-size: 10px;
+        color: #898989;
+    }
+
+</style>
+<script src="/js/cart.js"></script>
+

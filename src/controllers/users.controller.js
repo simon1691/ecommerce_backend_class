@@ -35,11 +35,11 @@ export const login = async (req, res) => {
       httpOnly: true, // No se expone la cookie
       // httpOnly: false // expone la cookie
     });
-
     res.status(200).send({
       success: true,
       message: "User logged in successfully",
       accessToken: accessToken,
+      user: user,
     });
   } catch (error) {
     req.logger.error(error.name, {
@@ -136,3 +136,50 @@ export const UserPassRecovery = async (req, res) => {
     });
   }
 };
+
+export const getAllUsers = async (req, res) => {
+  try {
+    let users = await usersManager.getAllUsers()
+    if(!users){
+      res.status(400).send({
+        payload: {
+          message: "No Users list created yet ",
+          success: false,
+        },
+      });
+      CustomError.createError({
+        name: "No Users lists",
+        message: "There is not User lists already created",
+        code: EErrors.INVALID_TYPES,
+        cause: "The user list is empty",
+      });
+    }
+    res.send({
+      payload: {
+        success: true,
+        users: users
+      }
+    })
+  } catch (error) {
+    req.logger.error(error.name, {
+      message: error.message,
+      code: error.code,
+      stack: error.stack,
+    });
+  }
+}
+
+export const deleteInActiveUsers = async (req, res) => {
+  try {
+    let deletedUsers = await usersManager.deleteInActiveUsers()
+      res.status(200).send({
+        payload: {
+          message: deletedUsers.length > 0 ? "All unactive Users where deleted" : "All users are active, nothing to be deleted",
+          success: true,
+          usersDeleted: deletedUsers
+        }
+      })
+  } catch (error) {
+     console.error(error)
+  }
+}

@@ -35,7 +35,10 @@ export default class CartManagerService {
     try {
       let cart = await cartModel
         .findOne({ _id: cartId })
-        .populate("products.product");
+        .populate("products.product")
+        .lean();
+
+        console.log(cart);
       return cart;
     } catch (error) {
       console.error(error);
@@ -80,54 +83,27 @@ export default class CartManagerService {
     }
   };
 
-  //DELETE A Product and a cart when cart is empty
+
+
   deleteProductsInCart = async (cartId, productId) => {
     try {
-      let cart = await cartModel.findOne({ _id: cartId });
-      if (cart === null) {
-        return cart;
-      } else {
-        let products = cart.products;
-        let existingProduct = products.find(
-          (product) => product.product == productId
-        );
-        if (existingProduct) {
-          if (existingProduct.quantity > 1) {
-            await cartModel.updateOne(
-              { _id: cartId },
-              { $inc: { "products.$[product].quantity": -1 } },
-              { arrayFilters: [{ "product._id": existingProduct._id }] }
-            );
-            cart = await cartModel.findOne({ _id: cartId });
-            return { message: "Quantity decreased successfully", cart };
-          } else {
-            let productToRemove = products.findIndex(
-              (product) => product._id === productId
-            );
-            products.splice(productToRemove);
-            if (products.length) {
-              cartModel.findOneAndDelete({ _id: existingProduct.product });
-              await cartModel.updateOne({ _id: cartId }, { products });
-              return {
-                message: `this Product was removed from cart: ${cartId}`,
-                cart,
-              };
-            }
-            await cartModel.updateOne({ _id: cartId }, { products });
-            return { message: "Cart is empty, lets add a product", cart };
-          }
-        } else {
-          return {
-            message:
-              "The Product does not exists or was already removed from cart",
-            cart,
-          };
-        }
-      }
+      let cart = await cartModel
+      .findOne({ _id: cartId })
+      .populate("products.product")
+      .lean();
+
+      if (cart === null || productId === null) return cart;
+
+      let products = cart.products;
+      products = products.filter(product => product.product._id.toString() !== productId);
+
+      await cartModel.updateOne({ _id: cartId }, { products });
+      return cart
+    
     } catch (error) {
       console.error(error);
     }
-  };
+  }
 
   //DELETE A CART
   deleteCart = async (cartId) => {
@@ -161,34 +137,47 @@ export default class CartManagerService {
   //ADD PRODUCTS TO THE CART
   updateProductsInCart = async (cartId, productId, quantity) => {
     try {
-      let cart = await cartModel.findOne({ _id: cartId });
+      let cart = await cartModel.findOne({ _id: cartId })
+      .populate("products.product")
+      .lean();
       if (cart === null) {
         cart;
       } else {
         let products = cart.products;
         if (products.length) {
-          let existingProduct = products.find(
-            (product) => product.product == productId
-          );
-          if (existingProduct) {
-            await cartModel.updateOne(
-              { _id: cartId },
-              {
-                $inc:
-                  quantity !== undefined
-                    ? { "products.$[product].quantity": quantity }
-                    : { "products.$[product].quantity": 0 },
-              },
-              { arrayFilters: [{ "product._id": existingProduct._id }] }
-            );
-            cart = await cartModel.findOne({ _id: cartId });
-            return cart;
-          }
-          products.push({ product: productId });
+
+          products.forEach((product) => {
+            console
+            if (product.product._id.toString() === productId) {
+              product.quantity = quantity;
+            }
+          })
+
           await cartModel.updateOne({ _id: cartId }, { products });
           return cart;
+
+          // let existingProduct = products.find(
+          //   (product) => product.product == productId
+          // );
+          // if (existingProduct) {
+          //   await cartModel.updateOne(
+          //     { _id: cartId },
+          //     {
+          //       $inc:
+          //         quantity !== undefined
+          //           ? { "products.$[product].quantity": quantity }
+          //           : { "products.$[product].quantity": 0 },
+          //     },
+          //     { arrayFilters: [{ "product._id": existingProduct._id }] }
+          //   );
+          //   cart = await cartModel.findOne({ _id: cartId });
+          //   return cart;
+          // }
+          // products.push({ product: productId });
+          // await cartModel.updateOne({ _id: cartId }, { products });
+          // return cart;
         }
-        products.push({ product: productId });
+        // products.push({ product: productId });
         await cartModel.updateOne({ _id: cartId }, { products });
         return cart;
       }
@@ -199,8 +188,7 @@ export default class CartManagerService {
 
   purchaseOrder = async (cartId, user) => {
     try {
-      let cart = await cartModel
-        .findOne({ _id: cartId })
+      let cart = await cartModel.findOne({ _id: cartId })
         .populate("products.product")
         .lean();
       //validations cart

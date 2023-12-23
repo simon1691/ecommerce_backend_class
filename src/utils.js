@@ -35,4 +35,5 @@ export const cookieExtractor = (req) => {
   return token;
 };
 
+
 export default __dirname;

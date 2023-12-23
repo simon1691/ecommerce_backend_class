@@ -27,7 +27,8 @@ const userScheme = new mongoose.Schema({
         ],
         default: [],
         index: true,
-    }
+    },
+    lastLogin: Date
 })
 
 userScheme.pre('find', function() {

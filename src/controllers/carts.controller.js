@@ -96,6 +96,8 @@ export const getCartById = async (req, res) => {
         success: true,
       },
     });
+    // console.log(productsInCart);
+    // res.render("cart", {productsInCart});
   } catch (error) {
     req.logger.error(error.name, {
       message: error.message,
@@ -313,6 +315,7 @@ export const addProductQuantityToCart = async (req, res) => {
         productUpdated: productId,
         cart: cartId,
         success: true,
+        cart: productsToUpdate
       },
     });
   } catch (error) {

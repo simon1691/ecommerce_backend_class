@@ -18,7 +18,6 @@ import usersRoutes from './routers/users.routes.js'
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from'swagger-ui-express';
 
-
 //passport
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
@@ -85,6 +84,7 @@ app.use('/api/users',usersRoutes)
 
 //Configuracion handlebars
 app.engine('handlebars', handlebars.engine());
+app.set('partials', __dirname + '/views/partials')
 app.set('views', __dirname + '/views/');
 app.set('view engine', 'handlebars');
 
