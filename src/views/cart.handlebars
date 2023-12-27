@@ -12,12 +12,13 @@
                         </div>
                          <div class="col-4 d-flex align-items-start justify-content-end">
                             <div class="d-flex flex-column me-3">
-                                <div class="d-flex items-align-center justify-content-center rounded border px-2">
-                                    <button id="less-priduct-{{this.product._id}}" class="less-product d-flex items-align-center justify-content-center bg-white border-none rounded">-</button>
+                                <div id="buttons-container-{{this.product._id}}" class="d-flex items-align-center justify-content-center rounded border px-2">
+                                    <button id="less-product-{{this.product._id}}" class="less-product d-flex items-align-center justify-content-center bg-white border-none rounded">-</button>
                                      <input id='product-quantity-{{this.product._id}}' class="cart-item-quantity text-center" type="text" value="{{this.quantity}}" />
-                                     <button id="'more-product-{{this.product._id}}" class="more-product d-flex items-align-center justify-content-center bg-white border-none rounded">+</button>
+                                     <button id="more-product-{{this.product._id}}" class="more-product d-flex items-align-center justify-content-center bg-white border-none rounded">+</button>
                                 </div>
-                                <small class="cart-item-stock-text">in stock: <span id="in-stock-{{this.product.id}}">{{this.product.stock}}</span> units</small>
+                                <small id="error-message-{{this.product._id}}" class="d-none text-danger fst-italic fs-6"></small>
+                                <small class="cart-item-stock-text">in stock: <span id="in-stock-{{this.product._id}}">{{this.product.stock}}</span> units</small>
                             </div>
                            <p class="cart-total-container cmy-0 pt-1 d-flex justify-content-end items-align-center"><span>$</span> <span id="cart-total-{{this.product._id}}">{{this.total}}</span></p>
                          </div>

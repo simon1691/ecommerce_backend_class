@@ -155,29 +155,7 @@ export default class CartManagerService {
 
           await cartModel.updateOne({ _id: cartId }, { products });
           return cart;
-
-          // let existingProduct = products.find(
-          //   (product) => product.product == productId
-          // );
-          // if (existingProduct) {
-          //   await cartModel.updateOne(
-          //     { _id: cartId },
-          //     {
-          //       $inc:
-          //         quantity !== undefined
-          //           ? { "products.$[product].quantity": quantity }
-          //           : { "products.$[product].quantity": 0 },
-          //     },
-          //     { arrayFilters: [{ "product._id": existingProduct._id }] }
-          //   );
-          //   cart = await cartModel.findOne({ _id: cartId });
-          //   return cart;
-          // }
-          // products.push({ product: productId });
-          // await cartModel.updateOne({ _id: cartId }, { products });
-          // return cart;
         }
-        // products.push({ product: productId });
         await cartModel.updateOne({ _id: cartId }, { products });
         return cart;
       }

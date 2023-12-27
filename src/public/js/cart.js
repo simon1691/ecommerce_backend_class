@@ -1,6 +1,31 @@
+
+
+
 const extractCookie = (cookieName) => {
     return document.cookie.split(';').find((item) => item = item.trim().startsWith(`${cookieName}`)).split('=')[1]
 }
+
+const productsInCart = JSON.parse(extractCookie('cartInfo')).products
+
+const checkStock = () => {
+    productsInCart.forEach((product) => {
+        let productHTML = document.getElementById(`buttons-container-${product.product._id}`)
+        let errorMessage = document.getElementById(`error-message-${product.product._id}`)
+        let addButton = document.getElementById(`more-product-${product.product._id}`)
+        let sustractButton = document.getElementById(`less-product-${product.product._id}`)
+        if(product.product.stock < product.quantity) {
+            productHTML.classList.add('border-danger')
+            errorMessage.innerText = `The quantity exceeds the stock`
+            errorMessage.classList.remove('d-none')
+            return
+        }
+        if(product.product.stock === product.quantity) {
+            addButton.disabled = true
+            return
+        }ç
+    })
+}
+checkStock()
 
 const addButton = document.getElementsByClassName('more-product')
 const sustractButton = document.getElementsByClassName('less-product')
@@ -32,19 +57,32 @@ const addQuantity = async (e) => {
 // adds the quantity of the product by one to the cart
 const addQuantityByOne = (e) => {
     e.preventDefault()
-    const inputId = document.getElementById(e.target.previousElementSibling.id)
-    inputId.value = parseFloat(inputId.value) + 1
-    inputId.dispatchEvent(new Event('input'))
+    const productId = e.target.id.split('-')[2]
+    const addButton = document.getElementById(`more-product-${productId}`)
+    const sustractButton = document.getElementById(`less-product-${productId}`)
+    const productStock = parseInt(document.getElementById(`in-stock-${productId}`).innerHTML)
+    let inputId = ''
+    console.log(addButton, e.target.id)
+
+    if(e.target.id === sustractButton.id){
+        inputId = document.getElementById(e.target.nextElementSibling.id)
+        inputId.value = parseFloat(inputId.value) - 1
+        disabledButton(addButton, sustractButton, productStock, inputId, productId)
+        inputId.dispatchEvent(new Event('input'))
+        return
+    }
+    if(e.target.id === addButton.id){
+        inputId = document.getElementById(e.target.previousElementSibling.id)
+        inputId.value = parseFloat(inputId.value) + 1
+        disabledButton(addButton, sustractButton, productStock, inputId, productId)
+        inputId.dispatchEvent(new Event('input'))
+        return
+    }
+
+
+    
 }
 
-const removeQuantityByOne = (e) => {
-    e.preventDefault()
-    const inputId = document.getElementById(e.target.nextElementSibling.id)
-    if(inputId.value <= 1) return
-    inputId.value = parseFloat(inputId.value) - 1
-    inputId.dispatchEvent(new Event('input'))
-
-}
 // converts de quantityInput variable to and array and then adds it the event listener to perform the addition of the quantity
 let inputsArray = Array.from(quantityInput)
 inputsArray.forEach((input) => input.addEventListener('input', (e) => addQuantity(e)))
@@ -54,8 +92,32 @@ moreProductArray.forEach((button) => button.addEventListener('click', (e) => add
 
 console.log(moreProductArray)
 let lessProductArray = Array.from(sustractButton)
-lessProductArray.forEach((button) => button.addEventListener('click', (e) => removeQuantityByOne(e)))
+lessProductArray.forEach((button) => button.addEventListener('click', (e) => addQuantityByOne(e)))
 
+const disabledButton = (addButton, sustractButton, stock, inputId, productId) => {
+    const errorMessage = document.getElementById(`error-message-${productId}`)
 
+    if(inputId.value <= 1) {
+        console.log("entro por inputId <= 1")
+        sustractButton.disabled = true
+        addButton.disabled = false
+        inputId.value =  1
+        errorMessage.classList.add('d-none')
+        return
+    }if (stock < inputId.value) {
+        console.log("entro por stock < inputId.value")
+        inputId.value = stock
+        sustractButton.disabled = false
+        addButton.disabled = true
+        errorMessage.classList.add('d-none')
+        return
+    }
+    if(stock >= inputId.value) {
+        sustractButton.disabled = false
+        addButton.disabled = false
+        errorMessage.classList.add('d-none')
+        return
+    }
+}
 
 
