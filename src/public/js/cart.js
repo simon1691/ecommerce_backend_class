@@ -22,7 +22,7 @@ const checkStock = () => {
         if(product.product.stock === product.quantity) {
             addButton.disabled = true
             return
-        }ç
+        }
     })
 }
 checkStock()
@@ -96,20 +96,20 @@ lessProductArray.forEach((button) => button.addEventListener('click', (e) => add
 
 const disabledButton = (addButton, sustractButton, stock, inputId, productId) => {
     const errorMessage = document.getElementById(`error-message-${productId}`)
+    const buttonsContainer = document.getElementById(`buttons-container-${productId}`)
 
     if(inputId.value <= 1) {
-        console.log("entro por inputId <= 1")
         sustractButton.disabled = true
         addButton.disabled = false
         inputId.value =  1
         errorMessage.classList.add('d-none')
         return
     }if (stock < inputId.value) {
-        console.log("entro por stock < inputId.value")
         inputId.value = stock
         sustractButton.disabled = false
         addButton.disabled = true
         errorMessage.classList.add('d-none')
+        buttonsContainer.classList.remove('border-danger')
         return
     }
     if(stock >= inputId.value) {

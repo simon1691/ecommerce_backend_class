@@ -4,6 +4,8 @@ const cart = document.getElementById('cart')
 
 
 
+
+
 logout.addEventListener('click', () => {
     fetch('/api/sessions/logout')
     .then((response) => {
@@ -38,10 +40,37 @@ cart.addEventListener('click', async () => {
 // get id by product and add it to cart
 const getId = (e) => {
     let idProduct = e.target.id
-    console.log(idProduct)
     let cartId = cartIdFromCookie()
-    console.log(cartId)
     addProductToCart(cartId, idProduct)
+    showProductAddedAlert(e)
+
+}
+
+const showProductAddedAlert = (e) => {
+    const productId = e.target.id
+    const productName = document.getElementById(`product-name-${productId}`).innerText
+    const productAddedHTML = document.getElementById('product-added-alert')
+    const productAddedNameHTML = document.getElementById('product-added-name')
+    const productAddedAlert = document.createElement('div')
+    productAddedAlert.setAttribute('id', 'product-added-alert')
+    productAddedAlert.setAttribute('class', 'position-absolute mx-3')
+    productAddedAlert.innerHTML = `
+        <div class="border border-success rounded p-3 position-relative bg-white">
+            <div class="text-container ps-2">
+                <p id="product-added-name" class="my-0"></p>
+                <p class="mt-1 mb-0">was added successfuly to the cart!</p>
+            </div>
+        </div>`
+
+
+    productAddedHTML.classList.add('product-added-alert-animation-in')
+    
+    hidesAlertTimeOut = setTimeout(() => {
+        console.log('test')
+        productAddedHTML.classList.remove('product-added-alert-animation-in')
+        productAddedHTML.classList.add('product-added-alert-animation-out')
+    }, 2000)
+    productAddedNameHTML.innerText = productName
 }
 
 const addProductToCart = async (cartId, idProduct) => {

@@ -17,8 +17,8 @@
                                      <input id='product-quantity-{{this.product._id}}' class="cart-item-quantity text-center" type="text" value="{{this.quantity}}" />
                                      <button id="more-product-{{this.product._id}}" class="more-product d-flex items-align-center justify-content-center bg-white border-none rounded">+</button>
                                 </div>
-                                <small id="error-message-{{this.product._id}}" class="d-none text-danger fst-italic fs-6"></small>
                                 <small class="cart-item-stock-text">in stock: <span id="in-stock-{{this.product._id}}">{{this.product.stock}}</span> units</small>
+                                <small id="error-message-{{this.product._id}}" class="fnt-10 d-none text-danger fst-italic"></small>
                             </div>
                            <p class="cart-total-container cmy-0 pt-1 d-flex justify-content-end items-align-center"><span>$</span> <span id="cart-total-{{this.product._id}}">{{this.total}}</span></p>
                          </div>
@@ -28,6 +28,9 @@
                 </div>
                 <div class="cart-checkout-card col-4 p-3 border rounded bg-white ms-3">
                    <h6>Order summary</h5>
+                   
+                    <a href="/api/carts/{{cartId}}/purchase">Checkout</a>
+                   
                 </div>
             </div>
         
@@ -54,6 +57,7 @@
         color: #898989;
     }
     .cart-total-container{ width: 50px;}
+    .fnt-10{font-size:10px}
 
 </style>
 <script src="/js/cart.js"></script>

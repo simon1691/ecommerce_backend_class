@@ -96,7 +96,7 @@ router.get("/cart/:id", authenticateJWT, async (req, res) => {
       return product;
     })
     console.log(productsInCart)
-    res.render("cart", {productsInCart, user, url: `/cart/${cartId}` ? false : true });
+    res.render("cart", {productsInCart, user, url: `/cart/${cartId}` ? false : true, cartId});
     console.log
   } catch (error) {
     console.error(error);
