@@ -1,0 +1,19 @@
+paths:
+  /api/carts/{id}:
+    delete:
+      summary: Deletes the Cart with given id
+      tags:
+        - Carts
+      parameters:
+      - name: id
+        in: path
+        description: path parameter takes the Cart id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Responses whit a payload object with cart ID deleted and success value in true
+        "400":
+          description: cart could not be deleted Error
+        "500":
+          description: Unexpected error from the server, the request can be managed

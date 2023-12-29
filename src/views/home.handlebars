@@ -1,17 +1,13 @@
-
-{{#if user.admin}}
-<div class="container-fluid d-flex justify-content-between py-3 px-5 bg-dark mb-5 align-items-center text-white">
-    <p class="pe-2 fw-medium m-0 fs-6">Bienvenido Super Usuario: {{user.first_name}} {{user.last_name}}</p>
-    <button id="logout" type="button" class="btn btn btn-light btn-sm">Logout</button>
+{{> nav}}
+<div id="home-container">
+    <div id="product-added-alert" class="position-absolute mx-3">
+    <div class="border border-success rounded p-3 position-relative bg-white">
+        <div class="text-container ps-2">
+            <p id="product-added-name" class="my-0"></p>
+            <p class="mt-1 mb-0">was added successfuly to the cart!</p>
+        </div>
+    </div>
 </div>
-
-{{else}}
-<div class="container-fluid d-flex justify-content-between py-3 px-5 bg-primary-subtle mb-5 align-items-center">
-    <p class="pe-2 fw-medium m-0 fs-6">Bienvenido: {{user.first_name}} {{user.last_name}}</p>
-    <button id="logout" type="button" class="btn btn-outline-secondary btn-sm">Logout</button>
-</div>
-{{/if}}
-
 <div class="container">
     {{#if areProducts}}
         <h1 class="text-center mb-5">Listado de productos existentes</h1>
@@ -22,7 +18,7 @@
                     <img height="150" src="#" class="card-img-top w-100 bg-secondary-subtle" alt="">
                     <div class="card-body">
                         <p class="badge text-bg-primary fw-light mt-0 mb-2 bg-info-subtle text-black">{{this.category}}</p>
-                        <h5 class="card-title">{{this.title}}</h5>
+                        <h5 id="product-name-{{this._id}}" class="card-title">{{this.title}}</h5>
                         <p class="card-text">{{this.description}}</p>
                         <p class="card-text fw-bold">Price: ${{this.price}}</p>
                         <button id={{this._id}} type="button" class="btn btn-primary btn-sm w-100" onclick="getId(event)">Add To cart</button>
@@ -36,7 +32,38 @@
         <h1>No Hay productos aun para mostrar</h1>
     {{/if}}
 </div>
+</div>
+<style>
 
+    #product-added-alert {
+        top: 70px;
+        right: -320px;
+    }
+    #product-added-alert > div {
+        -webkit-box-shadow: -1px 11px 19px -5px rgba(171,171,171,0.51);
+        -moz-box-shadow: -1px 11px 19px -5px rgba(171,171,171,0.51);
+        box-shadow: -1px 11px 19px -5px rgba(171,171,171,0.51);
+    }
+    #product-added-alert .text-container::before{
+        position: absolute;
+        left: 0;
+        content: "";
+        display: block;
+        width:10px;
+        height:100%;
+        top: 0;
+        background-color: green;
+        border-radius: 2px 0 0 2px;
+    }
+    .product-added-alert-animation-in {
+        right: 0 !important;
+        transition: right 0.5s ease-in-out;
+    }
+    .product-added-alert-animation-out {
+        right: -320px;
+        transition: right 0.5s ease-in-out;
+    }
+</style>
 <script src="/js/index.js"></script>
 
 

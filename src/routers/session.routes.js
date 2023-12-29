@@ -1,5 +1,8 @@
 import { Router } from "express";
 import passport from 'passport';
+import { login, UserPassRecovery } from "../controllers/users.controller.js";
+import MailingService from '../services/mailer/mailer.js';
+import { createJWT } from "../utils.js";
 
 const router = new Router();
 
@@ -20,45 +23,35 @@ router.get("/githubcallback", passport.authenticate('github', { failureRedirect:
 });
 
 router.get('/logout',(req,res)=>{
-  req.session.destroy(function (err) {
-    req.session = null;
-    res.
-    status(200)
-    .send({
-      status: "Success",
-      message: "Te has deslogueado con exito"
-    });
-   });
+    // res.clearCookie('jwtCookieToken').redirect("/login").status(200).send({ success: "true", message: "Se ha cerrado la sesión" });
+    res.clearCookie('jwtCookieToken').send({ success: "true", message: "Se ha cerrado la sesión" })
 })
 
 router.post("/register", passport.authenticate('register', { failureRedirect: '/api/sessions/fail-register' }), async (req, res) => {
-    console.log("Registrando nuevo usuario.");
     res.status(201).send({ status: "success", message: "Usuario creado con extito." })
-
 })
 
-router.post("/login", passport.authenticate("login", { failureRedirect: '/api/sessions/fail-login' }), async (req, res) => {
-    console.log("User found to login:");
-    const user = req.user;
+router.post("/login", login)
 
-    if (!user) return res.status(401).send({ status: "error", error: "credenciales incorrectas" });
-    req.session.user = {
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-        age: user.age
+router.post("/forgot-password", async (req, res) => {
+    let userEmail = req.body.email
+    let emailHashed = createJWT(userEmail)
+    const email = {
+        from:'SAPECOMMERCE',
+        to: userEmail,
+        subject:"Restaura tu contrasnea!",
+        html:`<div><a target="_blank" href="http://localhost:8181/restore-pass/${emailHashed}">Restaura tu contrasena aqui!</a>`
     }
-    res.send({ status: "success", payload: req.session.user, message: "¡Primer logueo realizado! :)" });
-});
 
+    const mailingService = new MailingService();
+    const emailSent = await mailingService.sendSimpleMail(email)
+    res.status(200).send({ status: "success", message: "Email enviado"})
+})
 
+router.put("/pass-recovery/:email", UserPassRecovery)
 
-router.get("/fail-register", (req, res) => {
-    res.status(401).send({ error: "Failed to process register!" });
-});
-
-router.get("/fail-login", (req, res) => {
-    res.status(401).send({ error: "Failed to process login!" });
-});
+router.get('/fail-register', async (req, res) => {
+    res.status(401).send({ success: "false", message: "Usuario ya Existe."})
+})
 
 export default router;

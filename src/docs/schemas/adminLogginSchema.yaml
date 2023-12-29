@@ -1,0 +1,17 @@
+components:
+  schemas:
+    AdminLogin:
+      type: object
+      properties:
+        email:
+          required: true
+          type: string
+        password:
+          required: true
+          type: string
+          unique: true
+      example:
+        admin:
+          email: <EMAIL>
+          password: <PASSWORD>
+

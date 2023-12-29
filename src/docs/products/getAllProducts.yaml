@@ -1,0 +1,19 @@
+paths:
+  /api/products:
+    get:
+      summary: Returns all available products in the app
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Successful response! Returns an array of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Product'
+        "400":
+          description: A invalid data was supplied
+        "500":
+          description: Unexpected error from the server, the request can be managed

@@ -3,30 +3,28 @@ import productModel from "../../models/products.model.js";
 export default class ProductManagerService {
   constructor() {}
 
-  addProduct = async (product) => {
+  getProducts = async (req, res, limit, sort, sortBy, filter, filterBy) => {
     try {
-      await productModel.create(product);
-      return product
-    } catch (error) {
-      console.error("error " + error);
-    }
-  };
-  getProducts = async (limit, sort, sortBy, filter, filterBy) => {
-    try {
-      if (filter) {
-        let productsList = await productModel
-          .find({ [filterBy]: filter })
-          .limit(limit)
-          .sort({ [sortBy]: sort })
-          .lean();
-        return productsList;
-      }
       let productsList = await productModel
-        .find()
+        .find(filter ? { [filterBy]: filter } : {})
         .limit(limit)
         .sort(sort ? { [sortBy]: sort } : {})
         .lean();
       return productsList;
+    } catch (error) {
+      console.error("error " + error);
+    }
+  };
+  addProduct = async (product) => {
+    try {
+      //check if the product code already exists
+      let productExists = await productModel.findOne({ code: product.code });
+      // if product does not Exists, create the new product
+      if (!productExists) {
+        const newProduct = await productModel.create(product);
+        return newProduct;
+      }
+      return;
     } catch (error) {
       console.error("error " + error);
     }
@@ -41,17 +39,23 @@ export default class ProductManagerService {
   };
   updateProduct = async (id, product) => {
     try {
-      const productToUpdate = await productModel
+      const productById = await productModel.findOne({ _id: id }).lean();
+      // If product can be found return undefined
+      if (!productById) {
+        return undefined;
+      }
+      let productUpdated = await productModel
         .findOneAndUpdate({ _id: id }, product)
         .lean();
-      return productToUpdate;
+      return productUpdated;
     } catch (error) {
       console.error("error " + error);
     }
   };
   deleteProduct = async (id) => {
     try {
-      const productToDelete = await productModel.deleteOne({ _id: id }).lean();
+      let productToDelete = await productModel.findOne({ _id: id }).lean();
+      await productModel.deleteOne({ _id: id }).lean();
       return productToDelete;
     } catch (error) {
       console.error("error " + error);

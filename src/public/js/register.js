@@ -7,7 +7,6 @@ form.addEventListener('submit', (e)=> {
     const fieldsData = {}
 
     data.forEach((value, key) => fieldsData[key] = value)
-    console.log(fieldsData,  JSON.stringify(fieldsData))
 
     fetch('/api/sessions/register', {
         method: 'POST',
@@ -16,7 +15,6 @@ form.addEventListener('submit', (e)=> {
             'Content-Type': 'application/json'
         }
     }).then(response =>{
-        console.log(response)
         if(response.status === 200){
             window.location.replace('/login')
         }

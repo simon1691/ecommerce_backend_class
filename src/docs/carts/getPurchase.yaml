@@ -1,0 +1,19 @@
+paths:
+  /api/carts/{id}/purchase:
+    get:
+      summary: Gets the Cart's purchase and the tickets for the purchase
+      tags:
+        - Carts
+      parameters:
+      - name: id
+        in: path
+        description: path parameter takes the Cart id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Responses whit a payload object with cart and success value in true, plus the information of the ticket purchase
+        "400":
+          description: Purchase could not be performed
+        "500":
+          description: Unexpected error from the server, the request can be managed

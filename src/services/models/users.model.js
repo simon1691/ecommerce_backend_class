@@ -11,8 +11,29 @@ const userScheme = new mongoose.Schema({
         unique: true,
         required: true
     },
-    password: String
+    password: String,
+    role: {
+        type: String,
+        default: "admin"
+    },
+    carts: {
+        type: [
+            {
+                cart: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "carts"
+                }
+            }
+        ],
+        default: [],
+        index: true,
+    },
+    lastLogin: Date
 })
+
+userScheme.pre('find', function() {
+    this.populate("carts.cart");
+});
 
 const userModel = mongoose.model(usersCollection, userScheme)
 export default userModel

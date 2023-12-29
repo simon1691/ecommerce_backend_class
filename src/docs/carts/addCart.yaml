@@ -1,0 +1,13 @@
+paths:
+  /api/carts:
+    post:
+      summary: Creates a new cart
+      tags:
+        - Carts
+      responses:
+        "201":
+          description: Returns a payload with the success status and the cart created.
+        "400":
+          description: Returns a payload with the success status "false" and the message why it fails.
+        "500":
+          description: Unexpected error from the server, the request can be managed
