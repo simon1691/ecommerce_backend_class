@@ -1,4 +1,4 @@
-import ticketModel from "../../models/tickets.model.js";
+import ticketModel from "../../models/tickets.Model.js";
 import CustomError from "../../errors/customError.js";
 import { EErrors } from "../../errors/errors-enum.js";
 
