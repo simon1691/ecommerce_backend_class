@@ -1,39 +1,70 @@
-<div class="w-100 position-absolute start-0 left-0 top-0 bottom-0 d-flex justify-content-center align-items-center mb-5">
-    <div class="">
-        <h1 id="login-title" class="mb-4 text-center">Bienvenido</h1>
+<div
+  class="w-100 position-absolute start-0 left-0 top-0 bottom-0 d-flex justify-content-center align-items-center mb-5"
+>
+  <div class="col-4">
+    <h1 id="login-title" class="mb-4 text-center">Welcome</h1>
 
-    <form id="loginForm" class="">
-        <div class="mb-4">
-            <label for="email" class="fw-medium mb-1">
-            Correo electronico
-            </label>
-            <input type="email" id="email" name="email" class="w-100 py-1 px-2 border border-1 rounded border-dark-subtle" placeholder="email@example.com">
-        </div>
-        <div id="pass-container" class="mb-4">
-        <label for="password" class="fw-medium mb-1">
-            Contrasena
+    <form id="loginForm" class="" novalidate>
+      <div class="mb-4">
+        <label for="email" class="fw-medium mb-1">
+          Email
         </label>
-        <input type="password" id="password" name="password" class="w-100 py-1 px-2 border border-1 rounded border-dark-subtle" placeholder="insert your pass">
-        </div>
-        <input id="btn-submit" class="btn btn-primary w-100" type="submit" value="Ingresar">
+        <input
+          type="email"
+          id="email-input"
+          name="email"
+          class="w-100 py-1 px-2 border border-1 rounded border-dark-subtle"
+          placeholder="email@example.com"
+        />
+        <small class="text-danger d-none">No email provided or invalid email</small>
+      </div>
+      <div id="pass-container" class="mb-4">
+        <label for="password" class="fw-medium mb-1">
+          Password
+        </label>
+        <input
+          type="password"
+          id="password-input"
+          name="password"
+          class="w-100 py-1 px-2 border border-1 rounded border-dark-subtle"
+          placeholder="insert your pass"
+        />
+        <small class="text-danger d-none">No password provided</small>
+      </div>
+      <input
+        id="btn-submit"
+        class="btn btn-primary w-100"
+        type="submit"
+        value="Login"
+      />
     </form>
 
-    <a href="/api/sessions/github" class="btn btn-outline-dark w-100 d-flex justify-content-center align-item-center mt-4">
-        <img src="/images/github-logo.png" alt="" class="d-block me-2" style="height: 20px; width: 20px">
-        <p class="m-0 p-0">Ingresar con gitHub</p>
+    <a
+      href="/api/sessions/github"
+      class="btn btn-outline-dark w-100 d-flex justify-content-center align-item-center mt-4"
+    >
+      <img
+        src="/images/github-logo.png"
+        alt=""
+        class="d-block me-2"
+        style="height: 20px; width: 20px"
+      />
+      <p class="m-0 p-0">Login with gitHub</p>
     </a>
-    <br>
-    <small class="text-center d-block">Si no posee una cuenta: <a href="/register">Registrese aqui</a></small>
-    <br>
-    <br>
-     <small class="text-center d-block">olvidaste tu contrasena? <a id="forgotPassword" href="/api/sessions/forgot-password">restaurala aqui</a></small>
+
+    <div class="d-flex mt-3 items-align-center justify-content-center">
+      <small class="text-center">
+        <a class="login-anchor" href="/register">Sign up</a></small>
+        <span class="mx-2">|</span>
+      <small class="text-center">
+        <a id="forgotPassword" class="login-anchor" href="/api/sessions/forgot-password">Forgot password?</a></small>
     </div>
-   
+  </div>
+
 </div>
 <style>
-    .btn.btn-outline-dark:hover{
-        background-color: rgb(212 212 212);
-        color:black;
-    }
+  .btn.btn-outline-dark:hover{ background-color: rgb(212 212 212); color:black;
+  }
+  .login-anchor{line-height: 0px;}
 </style>
 <script src="/js/login.js"></script>

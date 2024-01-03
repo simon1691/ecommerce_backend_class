@@ -3,6 +3,8 @@ const forgotPassword = document.getElementById('forgotPassword');
 const passContainer = document.getElementById('pass-container');
 const btnSubmit = document.getElementById('btn-submit');
 const loginTitle = document.getElementById('login-title');
+const emailInput = document.getElementById('email-input');
+const passwordInput = document.getElementById('password-input');
 let restorePasswordclicked = false
 
 forgotPassword.addEventListener('click', (e) => {   
@@ -45,6 +47,8 @@ async function restorePassword(loginData) {
 }
 
 async function login (loginData){
+   passAndEmailValidation(isEmailValid(loginData.email), isPasswordValid(loginData.password))
+
     const response = await fetch('/api/sessions/login', {
         method: 'POST',
         body: JSON.stringify(loginData),
@@ -61,3 +65,42 @@ async function login (loginData){
         window.location.replace('/')
     }
 }
+
+const isEmailValid = (email) => {
+    const emailRgex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRgex.test(email)
+}
+ const isPasswordValid = (password) => {
+    const passwordRgex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/
+    return passwordRgex.test(password)
+}
+
+const passAndEmailValidation = (isEmailValid, isPasswordValid) => {
+    if(!isEmailValid || !isPasswordValid){
+        if(!isEmailValid){
+            emailInput.classList.remove('border-dark-subtle')
+            emailInput.classList.add('border-danger')
+            emailInput.nextElementSibling.classList.remove('d-none')
+        }
+        if(!isPasswordValid){
+            passwordInput.classList.remove('border-dark-subtle')
+            passwordInput.classList.add('border-danger')
+            passwordInput.nextElementSibling.classList.remove('d-none')
+        }
+        return false
+    }
+    return true
+}
+
+//remove error message when input clicked
+emailInput.addEventListener('click', () => {
+    emailInput.classList.add('border-dark-subtle')
+    emailInput.classList.remove('border-danger')
+    emailInput.nextElementSibling.classList.add('d-none')
+})
+
+passwordInput.addEventListener('click', () => {
+    passwordInput.classList.add('border-dark-subtle')
+    passwordInput.classList.remove('border-danger')
+    passwordInput.nextElementSibling.classList.add('d-none')
+})
