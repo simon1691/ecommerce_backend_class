@@ -16,7 +16,49 @@ form.addEventListener('submit', (e)=> {
         }
     }).then(response =>{
         if(response.status === 200){
-            window.location.replace('/login')
+            validateAllFields()
+            // window.location.replace('/login')
         }
+        validateAllFields()
     })
 })
+
+
+const isEmailValid = (email) => {
+    const emailRgex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRgex.test(email)
+}
+ const isPasswordValid = (password) => {
+    const passwordRgex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/
+    return passwordRgex.test(password)
+}
+
+
+const validateAllFields = () => {
+    const inputFieldsArray = ['firstName', 'lastName', 'email', 'password',]
+    inputFieldsArray.forEach(inputField => {
+        let inputFieldElement = document.getElementById(inputField)
+        if(inputFieldElement.id !== 'email' && inputFieldElement.id !== 'password'){
+            if(inputFieldElement.value === ''){
+                inputFieldElement.classList.remove('border-dark-subtle')
+                inputFieldElement.classList.add('border-danger')
+                inputFieldElement.nextElementSibling.classList.remove('d-none')
+            }
+            return
+        }
+       if(inputFieldElement.id === 'email'){
+        if(!isEmailValid(inputFieldElement.value)){
+            inputFieldElement.classList.remove('border-dark-subtle')
+            inputFieldElement.classList.add('border-danger')
+            inputFieldElement.nextElementSibling.classList.remove('d-none')
+        }
+       }
+       if(inputFieldElement.id === 'password'){
+        if(!isEmailValid(inputFieldElement.value)){
+            inputFieldElement.classList.remove('border-dark-subtle')
+            inputFieldElement.classList.add('border-danger')
+            inputFieldElement.nextElementSibling.classList.remove('d-none')
+        }
+       }
+    })
+}
