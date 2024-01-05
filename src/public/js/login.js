@@ -7,6 +7,67 @@ const emailInput = document.getElementById('email-input');
 const passwordInput = document.getElementById('password-input');
 let restorePasswordclicked = false
 
+const setErrorMessage = (field, message = null) => {
+    field.classList.remove('border-dark-subtle')
+    field.classList.add('border-danger')
+    field.nextElementSibling.classList.remove('d-none')
+    if(message) {
+        field.nextElementSibling.innerText = message
+    }else{
+        field.nextElementSibling.innerText = field.name === 'email' ? "Email is empty or invalid" : "Your password must contain at least one digit, one uppercase letter, and one lowercase letter, and be at least 8 characters long. Please try again."
+    }
+}
+
+
+const clearErrorOnClick = (field) => {
+    field.classList.remove('border-danger')
+    field.classList.add('border-dark-subtle')
+    field.nextElementSibling.classList.add('d-none')
+}
+
+//remove error message when input clicked
+emailInput.addEventListener('click', () => { clearErrorOnClick(emailInput)})
+
+passwordInput.addEventListener('click', () => { clearErrorOnClick(passwordInput)})
+
+const isEmailValid = (email) => {
+    const emailRgex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    !emailRgex.test(email.value) ? setErrorMessage(emailInput) : ""
+    return  emailRgex.test(email.value)
+}
+ const isPasswordValid = (password) => {
+    const passwordRgex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/
+    !passwordRgex.test(password.value) ? setErrorMessage(passwordInput) : ""
+    return passwordRgex.test(password.value)
+}
+
+async function login (loginData){
+    isEmailValid(emailInput)
+    isPasswordValid(passwordInput)
+   if (!isEmailValid(emailInput) || !isPasswordValid(passwordInput))  return
+
+    const response = await fetch('/api/sessions/login', {
+        method: 'POST',
+        body: JSON.stringify(loginData),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    const data = await response.json()
+    if(response.status === 200){
+        const cartIdCookie = data.user.carts[0]._id
+        const userNameCookie = data.user.name
+        document.cookie = `cartIdCookie=${cartIdCookie}`
+        document.cookie = `userName=${userNameCookie}`
+        window.location.replace('/')
+    }
+    if(response.status === 400){
+        console.log(data.message)
+        setErrorMessage(emailInput, data.message)
+        setErrorMessage(passwordInput, data.message)
+    }
+}
+
 forgotPassword.addEventListener('click', (e) => {   
     e.preventDefault();
     btnSubmit.value = "Send email"
@@ -45,62 +106,3 @@ async function restorePassword(loginData) {
         window.location.replace('/')
     }
 }
-
-async function login (loginData){
-   passAndEmailValidation(isEmailValid(loginData.email), isPasswordValid(loginData.password))
-
-    const response = await fetch('/api/sessions/login', {
-        method: 'POST',
-        body: JSON.stringify(loginData),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    const data = await response.json()
-    const cartIdCookie = data.user.carts[0]._id
-    const userNameCookie = data.user.name
-    document.cookie = `cartIdCookie=${cartIdCookie}`
-    document.cookie = `userName=${userNameCookie}`
-    if(response.status === 200){
-        window.location.replace('/')
-    }
-}
-
-const isEmailValid = (email) => {
-    const emailRgex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return emailRgex.test(email)
-}
- const isPasswordValid = (password) => {
-    const passwordRgex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/
-    return passwordRgex.test(password)
-}
-
-const passAndEmailValidation = (isEmailValid, isPasswordValid) => {
-    if(!isEmailValid || !isPasswordValid){
-        if(!isEmailValid){
-            emailInput.classList.remove('border-dark-subtle')
-            emailInput.classList.add('border-danger')
-            emailInput.nextElementSibling.classList.remove('d-none')
-        }
-        if(!isPasswordValid){
-            passwordInput.classList.remove('border-dark-subtle')
-            passwordInput.classList.add('border-danger')
-            passwordInput.nextElementSibling.classList.remove('d-none')
-        }
-        return false
-    }
-    return true
-}
-
-//remove error message when input clicked
-emailInput.addEventListener('click', () => {
-    emailInput.classList.add('border-dark-subtle')
-    emailInput.classList.remove('border-danger')
-    emailInput.nextElementSibling.classList.add('d-none')
-})
-
-passwordInput.addEventListener('click', () => {
-    passwordInput.classList.add('border-dark-subtle')
-    passwordInput.classList.remove('border-danger')
-    passwordInput.nextElementSibling.classList.add('d-none')
-})
