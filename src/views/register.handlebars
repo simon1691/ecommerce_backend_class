@@ -5,26 +5,28 @@
       <h3 class="my-0 text-white">no worries, let's create one!</h6>
     </div>
     <div class="w-50 ps-3 pe-5 me-5">
-      <form id="register">
+      <form id="register" novalidate>
         <div class="mb-4">
             <div class="d-flex flex-column w-75 mx-auto mb-4">
-                <label for="firstName">
+                <label class="required-field" for="firstName">
                     First Name
                 </label>
-                <input class="w-100 border border-1 rounded border-dark-subtle px-2 py-1" id="firstName" type="text" name="first_name" />
+                <input class="register-input w-100 border border-1 rounded border-dark-subtle px-2 py-1" id="firstName" type="text" name="first_name" required/>
+                <small class="text-danger d-none">this field is required</small>
             </div>
             <div class="d-flex flex-column w-75 mx-auto mb-4">
                 <label for="lastName">
                     Last Name
                 </label>
-                <input class="w-100 border border-1 rounded border-dark-subtle px-2 py-1" type="text" id="lastName" name="last_name" />
+                <input class="register-input w-100 border border-1 rounded border-dark-subtle px-2 py-1" type="text" id="lastName" name="last_name" required/>
+                <small class="text-danger d-none">this field is required</small>
             </div>
 
              <div class="d-flex flex-column w-75 mx-auto">
                 <label for="age">
                     Age
                 </label>
-                <input class="w-100 border border-1 rounded border-dark-subtle px-2 py-1" id="age" type="age" name="age" />
+                <input class="register-input w-100 border border-1 rounded border-dark-subtle px-2 py-1" id="age" type="age" name="age" />
             </div>
             
         </div>
@@ -33,13 +35,15 @@
                 <label for="email">
                     Email
                 </label>
-                <input class="w-100 border border-1 rounded border-dark-subtle px-2 py-1" id="email" type="email" name="email" />
+                <input class="register-input w-100 border border-1 rounded border-dark-subtle px-2 py-1" id="email" type="email" name="email" required/>
+                <small class="text-danger d-none">this field is required</small>
             </div>
             <div class="d-flex flex-column w-75 mx-auto">
                 <label for="password">
                     Password
                 </label>
-                <input class="w-100 border border-1 rounded border-dark-subtle px-2 py-1" type="password" id="password" name="pasword" />
+                <input class="register-input w-100 border border-1 rounded border-dark-subtle px-2 py-1" type="password" id="password" name="pasword" required/>
+                <small class="text-danger d-none">this field is required</small>
             </div>
         </div>
          <div class="mb-3">
